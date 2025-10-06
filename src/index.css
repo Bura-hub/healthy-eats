@@ -271,6 +271,14 @@
     transform: scale(0.8);
   }
 
+  .animate-modal-close {
+    animation: modalClose 0.3s ease-in forwards;
+  }
+
+  .animate-modal-overlay-close {
+    animation: modalOverlayClose 0.3s ease-in forwards;
+  }
+
   @keyframes bounceSubtle {
     0%, 100% {
       transform: translateY(0);
@@ -325,6 +333,26 @@
     100% {
       opacity: 1;
       transform: scale(1);
+    }
+  }
+
+  @keyframes modalClose {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+  }
+
+  @keyframes modalOverlayClose {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
     }
   }
 

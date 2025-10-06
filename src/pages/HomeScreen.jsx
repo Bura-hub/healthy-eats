@@ -85,7 +85,7 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
               aria-label="Explorar menús del día"
             >
               <img 
-                src="/src/assets/images/fondo_inicio.jpeg" 
+                src="/src/assets/images/fondo_inicio.png" 
                 alt="Comida saludable"
                 className="w-full h-full object-cover rounded-full"
                 onError={(e) => {

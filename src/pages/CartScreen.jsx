@@ -8,8 +8,22 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
   const calculateTotals = useMemo(() => {
     const subtotal = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
     const deliveryFee = subtotal > 0 ? 5.00 : 0.00; // Tarifa simulada
-    const total = subtotal + deliveryFee;
-    return { subtotal, deliveryFee, total };
+    const taxes = subtotal > 0 ? 3.00 : 0.00; // Impuestos simulados
+    
+    // Descuentos profesionales
+    const discount = subtotal > 30 ? subtotal * 0.1 : 0; // 10% descuento si gastas más de $30
+    
+    const total = subtotal + deliveryFee + taxes - discount;
+    const savings = discount;
+    
+    return { 
+      subtotal, 
+      deliveryFee, 
+      taxes, 
+      discount, 
+      savings,
+      total
+    };
   }, [cart]);
 
   const handleUpdateQuantity = (id, change) => {
@@ -22,102 +36,418 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
     setCart(newCart);
   };
 
+  const handleRemoveItem = (id) => {
+    const newCart = cart.filter(item => item.id !== id);
+    setCart(newCart);
+  };
+
+  const handleClearCart = () => {
+    setCart([]);
+  };
+
   if (cartCount === 0) {
     return (
-      <div className="p-4 pt-10 pb-20 min-h-screen flex flex-col items-center justify-center text-center">
-        <Icon name="ShoppingCart" className="w-20 h-20 text-gray-300 mb-4" />
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">¡Tu carrito está triste!</h1>
-        <p className="text-gray-500 mb-6">Parece que aún no has seleccionado ningún menú saludable.</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 relative overflow-hidden pb-20 flex flex-col">
+        {/* Fondo responsive */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-4 md:top-32 md:left-8 w-32 h-32 md:w-48 md:h-48 bg-gradient-to-br from-emerald-200/15 to-teal-200/15 rounded-full blur-2xl"></div>
+          <div className="absolute bottom-40 right-4 md:bottom-48 md:right-8 w-24 h-24 md:w-36 md:h-36 bg-gradient-to-br from-lime-200/15 to-yellow-200/15 rounded-full blur-xl"></div>
+          <div className="hidden lg:block absolute top-1/3 right-1/4 w-32 h-32 bg-gradient-to-br from-green-200/10 to-emerald-200/10 rounded-full blur-xl"></div>
+        </div>
+
+        <div className="relative z-10 px-4 sm:px-6 md:px-8 lg:px-12 pt-6 md:pt-8 lg:pt-12 flex-1 flex flex-col justify-center max-w-7xl mx-auto w-full">
+          {/* Header profesional */}
+          <div className="mb-6 md:mb-8">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-800 tracking-tight leading-tight" style={{
+                  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                  fontWeight: '900',
+                  letterSpacing: '-0.03em',
+                  textShadow: '0 4px 8px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08)',
+                  background: 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}>
+                  Tu Carrito
+                </h1>
+                <p className="text-slate-500 text-sm sm:text-base font-medium leading-relaxed" style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: '500'
+                }}>
+                  Revisa y programa tu pedido
+                </p>
+              </div>
+              <div className="w-8 h-8"></div>
+            </div>
+          </div>
+
+          {/* Empty State */}
+          <div className="flex-1 flex flex-col items-center justify-center text-center">
+            <div className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full flex items-center justify-center mb-4 sm:mb-6 animate-bounce-subtle">
+              <Icon name="ShoppingCart" className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-emerald-600" />
+            </div>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-800 mb-2 sm:mb-3" style={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: '700'
+            }}>
+              ¡Tu carrito está triste!
+            </h2>
+            <p className="text-slate-500 mb-6 sm:mb-8 text-base sm:text-lg md:text-xl px-4" style={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: '500'
+            }}>
+              No tienes platos seleccionados.
+            </p>
         <button
           onClick={() => setView('menus')}
-          className="btn-primary"
-          aria-label="Ir a menús del día"
+              className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-2xl font-bold text-base sm:text-lg md:text-xl shadow-lg hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 transform hover:scale-105 border-2 border-emerald-400/20 backdrop-blur-sm animate-glow"
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: '700'
+              }}
+              aria-label="Ver menús del día"
         >
           Ver Menús del Día
         </button>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="p-4 pt-10 pb-40 min-h-screen bg-gray-50">
-      <h1 className="text-4xl font-extrabold text-gray-900 mb-6">Tu Pedido</h1>
-      
-      {/* Lista de Items */}
-      <div className="space-y-4 mb-8">
-        {cart.map(item => (
-          <div key={item.id} className="bg-white p-4 rounded-xl shadow-md flex space-x-4 items-center">
-            <div className="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0 text-xs text-center p-1 flex items-center justify-center">
-              {item.kcal} kcal
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 relative overflow-hidden pb-20 flex flex-col">
+      {/* Fondo responsive */}
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-4 md:top-32 md:left-8 w-32 h-32 md:w-48 md:h-48 bg-gradient-to-br from-emerald-200/15 to-teal-200/15 rounded-full blur-2xl"></div>
+        <div className="absolute bottom-40 right-4 md:bottom-48 md:right-8 w-24 h-24 md:w-36 md:h-36 bg-gradient-to-br from-lime-200/15 to-yellow-200/15 rounded-full blur-xl"></div>
+        <div className="hidden lg:block absolute top-1/3 right-1/4 w-32 h-32 bg-gradient-to-br from-green-200/10 to-emerald-200/10 rounded-full blur-xl"></div>
+      </div>
+
+      <div className="relative z-10 px-4 sm:px-6 md:px-8 lg:px-12 pt-6 md:pt-8 lg:pt-12 flex-1 flex flex-col max-w-7xl mx-auto w-full">
+        {/* Header profesional */}
+        <div className="mb-4 sm:mb-6 md:mb-8">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-800 tracking-tight leading-tight" style={{
+                fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                fontWeight: '900',
+                letterSpacing: '-0.03em',
+                textShadow: '0 4px 8px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08)',
+                background: 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>
+                Tu Carrito
+              </h1>
+              <p className="text-slate-500 text-sm sm:text-base font-medium leading-relaxed" style={{
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: '500'
+              }}>
+                Revisa y programa tu pedido
+              </p>
             </div>
-            <div className="flex-grow">
-              <h3 className="font-bold text-gray-900 truncate">{item.name}</h3>
-              <p className="text-sm text-primary-700 font-semibold">${item.price.toFixed(2)} c/u</p>
+            <button
+              onClick={handleClearCart}
+              className="p-2 sm:p-3 hover:bg-gray-100 rounded-full transition-colors"
+              aria-label="Vaciar carrito"
+            >
+              <Icon name="Trash" className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500" />
+            </button>
+          </div>
+        </div>
+
+        {/* Banner de Dirección Faltante */}
+        {!address.line1 && (
+          <div className="mb-4 sm:mb-6">
+            <div className="bg-gradient-to-r from-yellow-50 to-amber-50 border border-gray-200 rounded-3xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+              <div className="flex items-center space-x-3">
+                <div className="flex-shrink-0">
+                  <Icon name="AlertTriangle" className="w-6 h-6 text-yellow-600" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-slate-700 font-medium text-sm sm:text-base" style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: '600'
+                  }}>
+                    Selecciona Lugar de entrega para continuar.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setView('delivery')}
+                  className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-4 py-2 rounded-xl font-medium text-sm hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 transform hover:scale-105 shadow-lg border border-emerald-400/20"
+                  style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: '700'
+                  }}
+                >
+                  Configurar Dirección
+                </button>
+              </div>
             </div>
-            <div className="flex items-center space-x-3">
+          </div>
+        )}
+
+        {/* Lista de Items */}
+        <div className="flex-1 space-y-3 sm:space-y-4 mb-4 sm:mb-6">
+          {cart.map((item, index) => {
+            // Generar información dietética basada en los tags del item
+            const dietaryInfo = item.tags ? item.tags.join(' • ') : '';
+            const weight = item.kcal < 500 ? '350g' : '400g';
+            const description = `${weight}${dietaryInfo ? ` • ${dietaryInfo}` : ''}`;
+            
+            return (
+              <div 
+                key={item.id} 
+                className="bg-white/90 backdrop-blur-sm rounded-3xl p-3 sm:p-4 depth-3 border border-gray-200 hover:shadow-xl hover:bg-white/95 hover:scale-[1.02] hover:border-emerald-300 transition-all duration-500 transform group micro-interaction animate-slide-in-stagger"
+                style={{
+                  animationDelay: `${index * 150}ms`,
+                  animationFillMode: 'both'
+                }}
+              >
+                <div className="flex items-center space-x-3 sm:space-x-4">
+                  {/* Imagen del Plato con Badge de Cantidad */}
+                  <div className="relative">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-2xl flex items-center justify-center flex-shrink-0 border-2 border-emerald-300/50 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group-hover:border-emerald-400">
+                      <Icon name="MenuList" className="w-8 h-8 sm:w-10 sm:h-10 text-emerald-600" />
+                    </div>
+                    {/* Badge de Cantidad */}
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full flex items-center justify-center shadow-lg border-2 border-white">
+                      <span className="text-xs font-black" style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontWeight: '900'
+                      }}>
+                        {item.quantity}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Detalles del Item */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-slate-800 text-base sm:text-lg mb-1 truncate" style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontWeight: '700'
+                        }}>
+                          {item.name}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-gray-500 truncate" style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontWeight: '500'
+                        }}>
+                          {description}
+                        </p>
+                      </div>
+                      
+                      {/* Precios */}
+                      <div className="flex flex-col items-end ml-2">
+                        {/* Precio por Unidad */}
+                        <p className="text-xs sm:text-sm text-gray-500" style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontWeight: '500'
+                        }}>
+                          ${item.price.toFixed(2)} c/u
+                        </p>
+                        {/* Precio Total */}
+                        <span className="text-base sm:text-lg font-black text-emerald-500" style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontWeight: '900'
+                        }}>
+                          ${(item.quantity * item.price).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Control de Cantidad - Estilo Pill Mejorado */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200 rounded-full px-2 sm:px-3 py-1 hover:border-emerald-300 hover:from-emerald-50 hover:to-emerald-100 transition-all duration-300 shadow-sm hover:shadow-md">
               <button
                 onClick={() => handleUpdateQuantity(item.id, -1)}
-                className="w-7 h-7 bg-gray-200 text-gray-700 rounded-full font-bold hover:bg-gray-300 flex items-center justify-center"
+                          className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center hover:bg-white rounded-full transition-all duration-200 hover:scale-110 active:scale-95 shadow-sm hover:shadow-md"
                 aria-label={`Disminuir cantidad de ${item.name}`}
               >
-                <Icon name="Minus" className="w-3 h-3" />
+                          <Icon name="Minus" className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600 hover:text-emerald-600 transition-colors" />
               </button>
-              <span className="text-lg font-bold w-4 text-center">{item.quantity}</span>
+                        <span className="text-xs sm:text-sm font-black text-slate-800 mx-2 sm:mx-3 min-w-[20px] text-center" style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontWeight: '900'
+                        }}>
+                          {item.quantity}
+                        </span>
               <button
                 onClick={() => handleUpdateQuantity(item.id, 1)}
-                className="w-7 h-7 bg-primary-600 text-white rounded-full font-bold hover:bg-primary-700 flex items-center justify-center"
+                          className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center hover:bg-white rounded-full transition-all duration-200 hover:scale-110 active:scale-95 shadow-sm hover:shadow-md"
                 aria-label={`Aumentar cantidad de ${item.name}`}
               >
-                <Icon name="Plus" className="w-3 h-3" />
+                          <Icon name="Plus" className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600 hover:text-emerald-600 transition-colors" />
+                        </button>
+                      </div>
+                      
+                      {/* Botón Eliminar Mejorado */}
+                      <button
+                        onClick={() => handleRemoveItem(item.id)}
+                        className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center text-gray-400 hover:text-red-500 transition-all duration-300 hover:scale-110 active:scale-95 hover:bg-red-50 rounded-full border border-transparent hover:border-red-200 shadow-sm hover:shadow-md"
+                        aria-label={`Eliminar ${item.name}`}
+                      >
+                        <Icon name="X" className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
           </div>
-        ))}
       </div>
+        </div>
+            );
+          })}
+        </div>
 
-      {/* Resumen de Totales */}
-      <div className="card p-6 space-y-2">
-        <h2 className="text-xl font-bold text-gray-900 mb-3">Resumen</h2>
-        <div className="flex justify-between text-gray-600">
-          <span>Subtotal ({cartCount} productos)</span>
-          <span>${calculateTotals.subtotal.toFixed(2)}</span>
-        </div>
-        <div className="flex justify-between text-gray-600">
-          <span>Costo de Envío (Simulado)</span>
-          <span>${calculateTotals.deliveryFee.toFixed(2)}</span>
-        </div>
-        <div className="pt-3 flex justify-between font-extrabold text-xl text-primary-700 border-t border-dashed mt-2">
-          <span>Total a Pagar</span>
-          <span>${calculateTotals.total.toFixed(2)}</span>
+        {/* Resumen Financiero Mejorado */}
+        <div className="mb-4 sm:mb-6">
+          <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-4 sm:p-6 depth-3 border border-gray-200 hover:shadow-xl hover:bg-white/95 transition-all duration-500 transform hover:scale-[1.01]">
+            {/* Indicador de Ahorro */}
+            {calculateTotals.savings > 0 && (
+              <div className="mb-4 p-3 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl">
+                <div className="flex items-center space-x-2">
+                  <Icon name="CheckCircle" className="w-5 h-5 text-green-600" />
+                  <span className="text-sm font-bold text-green-800" style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: '700'
+                  }}>
+                    ¡Ahorras ${calculateTotals.savings.toFixed(2)} en este pedido!
+                  </span>
         </div>
       </div>
+            )}
+            
 
-      {/* CTA Fija */}
-      <div className="fixed bottom-16 left-0 right-0 p-4 bg-white/95 backdrop-blur-sm border-t border-gray-200 z-10">
-        {!address.line1 ? (
-          <div 
-            className="text-center p-3 bg-red-100 text-red-700 rounded-xl font-medium cursor-pointer" 
-            onClick={() => setView('delivery')}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                setView('delivery');
-              }
-            }}
-            aria-label="Configurar dirección de entrega"
-          >
-            🚨 Selecciona un Lugar de Entrega antes de continuar.
+            <div className="space-y-2 sm:space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-slate-600 font-medium text-sm sm:text-base" style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: '500'
+                }}>
+                  Subtotal
+                </span>
+                <span className="text-slate-800 font-black text-sm sm:text-base" style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: '900'
+                }}>
+                  ${calculateTotals.subtotal.toFixed(2)}
+                </span>
+              </div>
+              
+              {/* Descuento */}
+              {calculateTotals.discount > 0 && (
+                <div className="flex justify-between items-center">
+                  <span className="text-green-600 font-medium text-sm sm:text-base" style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: '500'
+                  }}>
+                    Descuento (10%)
+                  </span>
+                  <span className="text-green-600 font-black text-sm sm:text-base" style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: '900'
+                  }}>
+                    -${calculateTotals.discount.toFixed(2)}
+                  </span>
+                </div>
+              )}
+              
+              <div className="flex justify-between items-center">
+                <span className="text-slate-600 font-medium text-sm sm:text-base" style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: '500'
+                }}>
+                  Costo de envío
+                </span>
+                <span className="text-slate-800 font-black text-sm sm:text-base" style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: '900'
+                }}>
+                  ${calculateTotals.deliveryFee.toFixed(2)}
+                </span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-slate-600 font-medium text-sm sm:text-base" style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: '500'
+                }}>
+                  Impuestos
+                </span>
+                <span className="text-slate-800 font-black text-sm sm:text-base" style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: '900'
+                }}>
+                  ${calculateTotals.taxes.toFixed(2)}
+                </span>
+              </div>
+              
+              <div className="border-t-2 border-gray-200 pt-2 sm:pt-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-lg sm:text-xl font-bold text-slate-800" style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: '800'
+                  }}>
+                    Total
+                  </span>
+                  <span className="text-xl sm:text-2xl font-black text-emerald-500" style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: '900'
+                  }}>
+                    ${calculateTotals.total.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
-        ) : (
+        </div>
+
+        {/* Divisor Elegante */}
+        <div className="flex items-center justify-center mb-4">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+          <div className="mx-4 w-2 h-2 bg-emerald-400 rounded-full"></div>
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+        </div>
+
+        {/* Botón Principal Mejorado */}
+        <div className="pb-4 sm:pb-6">
           <button
             onClick={() => setView('checkout')}
-            className="btn-primary w-full text-lg py-4"
-            aria-label={`Proceder al checkout por ${calculateTotals.total.toFixed(2)}`}
+            className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-4 sm:py-5 rounded-3xl font-bold text-base sm:text-lg shadow-xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-emerald-400/20 backdrop-blur-sm animate-glow relative overflow-hidden"
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: '700'
+            }}
+            aria-label={`Programar pedido por ${calculateTotals.total.toFixed(2)}`}
           >
-            Programar Pedido (${calculateTotals.total.toFixed(2)})
+            {/* Efecto de brillo */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform translate-x-[-100%] hover:translate-x-[100%] transition-transform duration-700"></div>
+            <span className="relative z-10 flex items-center justify-center space-x-2">
+              <span>Programar pedido</span>
+              <Icon name="ArrowRight" className="w-5 h-5" />
+            </span>
           </button>
-        )}
+          
+          {/* Información adicional */}
+          <div className="mt-3 text-center space-y-1">
+            <p className="text-xs sm:text-sm text-gray-500" style={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: '500'
+            }}>
+              Se validará tu dirección y disponibilidad al continuar
+            </p>
+            <p className="text-xs text-emerald-600 font-medium" style={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: '600'
+            }}>
+              Tiempo estimado de entrega: 30-45 min
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

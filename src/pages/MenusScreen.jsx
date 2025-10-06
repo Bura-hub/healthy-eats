@@ -108,11 +108,31 @@ const MenusScreen = ({ setView, cart, setCart }) => {
 
   // Vista de Detalle del Plato (Modal)
   const ModalOverlay = () => {
+    const [isClosing, setIsClosing] = useState(false);
+    
     if (!selectedMenu) return null;
     
+    const handleClose = () => {
+      setIsClosing(true);
+      setTimeout(() => {
+        setSelectedMenu(null);
+        setIsClosing(false);
+      }, 300);
+    };
+    
     return (
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end animate-fade-in" onClick={() => setSelectedMenu(null)}>
-        <div className="bg-white rounded-t-3xl w-full max-h-[70vh] overflow-y-auto shadow-2xl border-t border-gray-200 animate-slide-up" onClick={(e) => e.stopPropagation()}>
+      <div 
+        className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end ${
+          isClosing ? 'animate-modal-overlay-close' : 'animate-fade-in'
+        }`} 
+        onClick={handleClose}
+      >
+        <div 
+          className={`bg-white rounded-t-3xl w-full max-h-[70vh] overflow-y-auto shadow-2xl border-t border-gray-200 ${
+            isClosing ? 'animate-modal-close' : 'animate-slide-up'
+          }`} 
+          onClick={(e) => e.stopPropagation()}
+        >
           {/* Indicador de arrastre profesional */}
           <div className="flex justify-center pt-4 pb-3">
             <div className="w-16 h-1 bg-gradient-to-r from-emerald-300 to-teal-300 rounded-full"></div>
@@ -120,10 +140,10 @@ const MenusScreen = ({ setView, cart, setCart }) => {
           <div className="p-6">
             {/* Header profesional */}
             <div className="flex items-center justify-between mb-6">
-              <button 
-                onClick={() => setSelectedMenu(null)}
-                className="p-3 hover:bg-gray-100/80 rounded-full transition-all duration-200 backdrop-blur-sm"
-              >
+                <button
+                  onClick={handleClose}
+                  className="p-3 hover:bg-gray-100/80 rounded-full transition-all duration-200 backdrop-blur-sm"
+                >
                 <Icon name="ArrowLeft" className="w-6 h-6 text-slate-600" />
               </button>
               <h2 className="text-2xl font-bold text-slate-800" style={{
@@ -132,6 +152,29 @@ const MenusScreen = ({ setView, cart, setCart }) => {
                 letterSpacing: '-0.02em'
               }}>{selectedMenu.name}</h2>
               <div className="w-12"></div>
+            </div>
+
+            {/* Imagen del plato en el modal */}
+            <div className="mb-6">
+              <div className="w-full h-48 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-2xl overflow-hidden border-2 border-emerald-300/50 shadow-lg relative">
+                {selectedMenu.image && (
+                  <img 
+                    src={selectedMenu.image} 
+                    alt={selectedMenu.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                )}
+                <div 
+                  className={`absolute inset-0 w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-100 to-teal-100 ${selectedMenu.image ? 'hidden' : 'flex'}`}
+                  style={{ display: selectedMenu.image ? 'none' : 'flex' }}
+                >
+                  <Icon name="MenuList" className="w-16 h-16 text-emerald-700" />
+                </div>
+              </div>
             </div>
 
             {/* Información nutricional profesional */}
@@ -207,10 +250,10 @@ const MenusScreen = ({ setView, cart, setCart }) => {
             {/* Botón de acción profesional */}
             <div className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-4 py-4 rounded-2xl shadow-lg border border-emerald-400/20">
               <button 
-                onClick={() => {
-                  handleAddToCart(selectedMenu);
-                  setSelectedMenu(null);
-                }}
+                  onClick={() => {
+                    handleAddToCart(selectedMenu);
+                    handleClose();
+                  }}
                 className="w-full text-center font-bold hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 py-2 rounded-xl transform hover:scale-105"
                 style={{
                   fontFamily: 'Inter, sans-serif',
@@ -326,10 +369,26 @@ const MenusScreen = ({ setView, cart, setCart }) => {
               <div className="flex items-start space-x-3">
                 {/* Imagen del plato profesional */}
                 <div 
-                  className="w-20 h-20 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-2xl flex-shrink-0 cursor-pointer flex items-center justify-center border-2 border-emerald-300/50 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group-hover:border-emerald-400"
+                  className="w-20 h-20 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-2xl flex-shrink-0 cursor-pointer border-2 border-emerald-300/50 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group-hover:border-emerald-400 overflow-hidden relative"
                   onClick={() => setSelectedMenu(menu)}
                 >
-                  <Icon name="MenuList" className="w-8 h-8 text-emerald-700 group-hover:text-emerald-800 transition-colors duration-300" />
+                  {menu.image ? (
+                    <img 
+                      src={menu.image} 
+                      alt={menu.name}
+                      className="absolute inset-0 w-full h-full object-cover rounded-2xl"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  <div 
+                    className={`absolute inset-0 w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-100 to-teal-100 rounded-2xl ${menu.image ? 'hidden' : 'flex'}`}
+                    style={{ display: menu.image ? 'none' : 'flex' }}
+                  >
+                    <Icon name="MenuList" className="w-8 h-8 text-emerald-700 group-hover:text-emerald-800 transition-colors duration-300" />
+                  </div>
                 </div>
 
                 {/* Información del plato profesional */}
