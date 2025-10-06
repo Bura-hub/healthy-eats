@@ -268,13 +268,13 @@ const MenusScreen = ({ setView, cart, setCart }) => {
         </div>
 
         {/* Carrusel de días profesional - Responsive */}
-        <div className="flex justify-center space-x-3 sm:space-x-4 mb-4 px-2 sm:px-0 overflow-x-auto">
-          <div className="flex space-x-3 sm:space-x-4 min-w-max">
+        <div className="flex justify-center space-x-2 sm:space-x-3 mb-6 px-2 sm:px-0">
+          <div className="flex space-x-2 sm:space-x-3 justify-center w-full max-w-md">
             {days.map(day => (
               <button
                 key={day.key}
                 onClick={() => handleDayChange(day.key)}
-                className={`px-4 py-3 sm:px-6 sm:py-3.5 md:px-8 md:py-4 rounded-[1.5rem] sm:rounded-[2rem] text-base sm:text-lg font-medium transition-all duration-300 whitespace-nowrap ${
+                className={`px-3 py-2.5 sm:px-4 sm:py-3 md:px-5 md:py-3.5 rounded-[1.5rem] sm:rounded-[2rem] text-sm sm:text-base font-medium transition-all duration-300 whitespace-nowrap flex-1 ${
                   selectedDay === day.key
                     ? 'bg-emerald-500 text-white shadow-lg transform scale-105 animate-pulse-slow'
                     : 'bg-white/80 text-gray-500/60 hover:bg-gray-100 hover:text-gray-500 hover:shadow-md border border-gray-300/60 hover:scale-105'
@@ -315,8 +315,8 @@ const MenusScreen = ({ setView, cart, setCart }) => {
           return (
             <div 
               key={menu.id} 
-              className={`bg-white/90 backdrop-blur-sm rounded-2xl p-3 shadow-lg border-2 border-gray-200 hover:shadow-xl hover:bg-white/95 hover:scale-[1.02] hover:border-emerald-300 transition-all duration-500 transform group ${
-                isFiltering ? 'animate-fade-out' : 'animate-menu-card'
+              className={`bg-white/90 backdrop-blur-sm rounded-2xl p-3 depth-3 border-2 border-gray-200 hover:shadow-xl hover:bg-white/95 hover:scale-[1.02] hover:border-emerald-300 transition-all duration-500 transform group micro-interaction ${
+                isFiltering ? 'animate-fade-out' : 'animate-slide-in-stagger'
               }`}
               style={{
                 animationDelay: `${index * 150}ms`,
@@ -426,7 +426,7 @@ const MenusScreen = ({ setView, cart, setCart }) => {
                     {/* Botón Agregar profesional */}
                     <button
                       onClick={() => handleAddToCart(menu)}
-                      className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-3 py-1.5 rounded-lg font-bold hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 border border-emerald-400/20 backdrop-blur-sm active:scale-95"
+                      className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-3 py-1.5 rounded-lg font-bold hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 border border-emerald-400/20 backdrop-blur-sm active:scale-95 micro-interaction animate-glow"
                       style={{
                         fontFamily: 'Inter, sans-serif',
                         fontWeight: '700'

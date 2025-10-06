@@ -61,7 +61,7 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
         {/* Hero Section responsive */}
         <div className="flex flex-col items-center space-y-4 md:space-y-6 lg:space-y-8">
           {/* Imagen principal con efectos de anillo profesional */}
-          <div className="relative group scale-in">
+          <div className="relative group animate-scale-in-bounce">
             {/* Anillo exterior profesional con múltiples capas */}
             <div className="absolute -inset-4 md:-inset-6 lg:-inset-8 bg-gradient-to-r from-slate-200 via-gray-100 to-slate-200 rounded-full opacity-30 group-hover:opacity-40 transition-all duration-700 blur-md animate-spin" style={{animationDuration: '20s'}}></div>
             
@@ -119,7 +119,7 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
           <div className="group fade-in-up-delay-1">
             <button 
               onClick={() => setView('menus')} 
-              className="w-full bg-white/90 p-4 md:p-6 lg:p-8 rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] shadow-md md:shadow-lg border border-slate-200/50 hover:shadow-lg md:hover:shadow-xl hover:bg-white transition-all duration-200 active:scale-[0.98] hover:border-emerald-200/50 min-h-[72px] md:min-h-[80px] lg:min-h-[88px]"
+              className="w-full bg-white/90 p-4 md:p-6 lg:p-8 rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] depth-2 border border-slate-200/50 hover:shadow-xl hover:bg-white transition-all duration-200 active:scale-[0.98] hover:border-emerald-200/50 min-h-[72px] md:min-h-[80px] lg:min-h-[88px] micro-interaction"
               aria-label="Ver menús del día"
             >
               <div className="flex items-center justify-between">
@@ -148,7 +148,7 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
           <div className="group fade-in-up-delay-2">
             <button 
               onClick={() => setView('delivery')} 
-              className="w-full bg-white/90 p-4 md:p-6 lg:p-8 rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] shadow-md md:shadow-lg border border-slate-200/50 hover:shadow-lg md:hover:shadow-xl hover:bg-white transition-all duration-200 active:scale-[0.98] hover:border-blue-200/50 min-h-[72px] md:min-h-[80px] lg:min-h-[88px]"
+              className="w-full bg-white/90 p-4 md:p-6 lg:p-8 rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] depth-2 border border-slate-200/50 hover:shadow-xl hover:bg-white transition-all duration-200 active:scale-[0.98] hover:border-blue-200/50 min-h-[72px] md:min-h-[80px] lg:min-h-[88px] micro-interaction"
               aria-label="Configurar dirección de entrega"
             >
               <div className="flex items-center justify-between">
