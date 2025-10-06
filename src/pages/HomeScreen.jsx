@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Icon from '../components/Icon';
+import fondoInicio from '../assets/images/fondo_inicio.png';
 
 // Componente profesional de la pantalla de inicio mejorado
 const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
   const [showAnimation, setShowAnimation] = useState(false);
   const [showContent, setShowContent] = useState(false);
-  const [showStats, setShowStats] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
@@ -17,7 +17,6 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
     // Animaciones de entrada
     const timer1 = setTimeout(() => setShowAnimation(true), 100);
     const timer2 = setTimeout(() => setShowContent(true), 600);
-    const timer3 = setTimeout(() => setShowStats(true), 1000);
     
     // Actualizar hora cada minuto
     const timeInterval = setInterval(() => {
@@ -27,7 +26,6 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
-      clearTimeout(timer3);
       clearInterval(timeInterval);
     };
   }, []);
@@ -119,7 +117,7 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
               aria-label="Explorar menús del día"
             >
               <img 
-                src="/src/assets/images/fondo_inicio.png" 
+                src={fondoInicio} 
                 alt="Comida saludable"
                 className="w-full h-full object-cover rounded-full"
                 onError={(e) => {
