@@ -60,7 +60,7 @@ const DeliveryScreen = ({ setView, setAddress }) => {
     setIsLoading(true);
     // Simular selección en mapa
     setTimeout(() => {
-      setNewAddress({
+      setNewAddress({ 
         street: 'Av. Salud',
         number: '123',
         city: 'Ciudad Verde',
@@ -188,8 +188,8 @@ const DeliveryScreen = ({ setView, setAddress }) => {
                 <span>{message}</span>
               </div>
             </div>
-          </div>
-        )}
+        </div>
+      )}
 
         {/* Direcciones guardadas mejoradas con animaciones */}
         <div className="mb-8 animate-fade-in-up" style={{
@@ -202,8 +202,8 @@ const DeliveryScreen = ({ setView, setAddress }) => {
           </h2>
           <div className="space-y-3">
             {SAVED_ADDRESSES.map((addr, index) => (
-              <div
-                key={addr.id}
+          <div
+            key={addr.id}
                 className={`bg-white/90 backdrop-blur-sm rounded-2xl border-2 p-4 cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.02] animate-slide-in-stagger ${
                   selectedAddress?.id === addr.id 
                     ? 'border-emerald-500 bg-emerald-50/50 shadow-lg animate-scale-in' 
@@ -243,9 +243,9 @@ const DeliveryScreen = ({ setView, setAddress }) => {
                     Editar
                   </button>
                 </div>
-              </div>
-            ))}
           </div>
+        ))}
+      </div>
 
           {/* Botones de acción para dirección seleccionada con animaciones */}
           {selectedAddress && (
@@ -268,7 +268,7 @@ const DeliveryScreen = ({ setView, setAddress }) => {
                   'Usar esta dirección'
                 )}
               </button>
-              <button
+          <button
                 onClick={handleMarkAsDefault}
                 className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-4 rounded-2xl font-semibold hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 hover:scale-[1.02] shadow-lg animate-scale-in"
                 style={{
@@ -348,7 +348,7 @@ const DeliveryScreen = ({ setView, setAddress }) => {
               </div>
             </div>
           )}
-
+          
           {/* Formulario de dirección mejorado con animaciones */}
           {(showAddressForm || showMap) && (
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl border border-slate-200 p-6 mb-4 shadow-lg animate-slide-down">
@@ -425,7 +425,7 @@ const DeliveryScreen = ({ setView, setAddress }) => {
                 <div className="flex items-center justify-center space-x-2">
                   <div className="w-4 h-4 border-2 border-emerald-300 border-t-emerald-600 rounded-full animate-spin"></div>
                   <span>Guardando...</span>
-                </div>
+              </div>
               ) : (
                 'Guardar dirección'
               )}
@@ -443,7 +443,7 @@ const DeliveryScreen = ({ setView, setAddress }) => {
                 <div className="flex items-center justify-center space-x-2">
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                   <span>Procesando...</span>
-                </div>
+            </div>
               ) : (
                 'Usar como predeterminada'
               )}

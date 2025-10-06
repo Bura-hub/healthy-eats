@@ -206,36 +206,6 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
           </div>
         </div>
 
-        {/* Banner de Dirección Faltante */}
-        {!address.line1 && (
-          <div className="mb-4 sm:mb-6">
-            <div className="bg-gradient-to-r from-yellow-50 to-amber-50 border border-gray-200 rounded-3xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
-              <div className="flex items-center space-x-3">
-                <div className="flex-shrink-0">
-                  <Icon name="AlertTriangle" className="w-6 h-6 text-yellow-600" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-slate-700 font-medium text-sm sm:text-base" style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontWeight: '600'
-                  }}>
-                    Selecciona Lugar de entrega para continuar.
-                  </p>
-                </div>
-                <button
-                  onClick={() => setView('delivery')}
-                  className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-4 py-2 rounded-xl font-medium text-sm hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 transform hover:scale-105 shadow-lg border border-emerald-400/20"
-                  style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontWeight: '700'
-                  }}
-                >
-                  Configurar Dirección
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Lista de Items */}
         <div className="flex-1 space-y-3 sm:space-y-4 mb-4 sm:mb-6">
