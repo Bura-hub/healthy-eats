@@ -9,7 +9,7 @@ export const MENU_DATA = [
     description: 'Ensalada tibia de garbanzos con verduras, pechuga de pollo a la plancha, arroz integral y mandarina.', 
     price: 12.50, 
     tags: ['Proteína', 'Bajo en Grasa'],
-    image: '/images/menu-a.jpg',
+    image: '/images/menu-a.png',
     nutritionalValues: {
       protein: '32g',
       carbs: '45g',
@@ -25,7 +25,7 @@ export const MENU_DATA = [
     description: 'Wrap integral con atún y aguacate, bastones de zanahoria y apio, y yogur natural.', 
     price: 10.00, 
     tags: ['Sin Gluten', 'Vegetariano'],
-    image: '/images/menu-b.jpg',
+    image: '/images/menu-b.png',
     nutritionalValues: {
       protein: '28g',
       carbs: '38g',
@@ -43,7 +43,7 @@ export const MENU_DATA = [
     description: 'Lentejas guisadas con verduras, huevo duro, ensalada fresca y manzana verde.', 
     price: 11.50, 
     tags: ['Proteína', 'Fibra'],
-    image: '/images/menu-c.jpg',
+    image: '/images/menu-c.png',
     nutritionalValues: {
       protein: '24g',
       carbs: '52g',
@@ -59,7 +59,7 @@ export const MENU_DATA = [
     description: 'Ensalada de quinua con pollo y verduras, pan integral y uvas.', 
     price: 13.00, 
     tags: ['Proteína', 'Sin Gluten'],
-    image: '/images/menu-d.jpg',
+    image: '/images/menu-d.png',
     nutritionalValues: {
       protein: '35g',
       carbs: '42g',
@@ -77,7 +77,7 @@ export const MENU_DATA = [
     description: 'Arroz con verduras, tortilla de huevo con espinaca y banano.', 
     price: 9.50, 
     tags: ['Vegetariano', 'Bajo en Grasa'],
-    image: '/images/menu-e.jpg',
+    image: '/images/menu-e.png',
     nutritionalValues: {
       protein: '18g',
       carbs: '58g',
@@ -93,7 +93,7 @@ export const MENU_DATA = [
     description: 'Arepa integral rellena de pollo, ensalada de repollo y zanahoria, y piña.', 
     price: 10.50, 
     tags: ['Proteína', 'Sin Gluten'],
-    image: '/images/menu-f.jpg',
+    image: '/images/menu-f.png',
     nutritionalValues: {
       protein: '26g',
       carbs: '38g',
@@ -111,7 +111,7 @@ export const MENU_DATA = [
     description: 'Sopa de verduras ligera, filete de pescado al horno, puré de papa y naranja.', 
     price: 14.50, 
     tags: ['Proteína', 'Bajo en Grasa'],
-    image: '/images/menu-g.jpg',
+    image: '/images/menu-g.png',
     nutritionalValues: {
       protein: '28g',
       carbs: '35g',
@@ -127,7 +127,7 @@ export const MENU_DATA = [
     description: 'Ensalada de pasta integral con atún y espinaca, pera y frutos secos.', 
     price: 15.00, 
     tags: ['Proteína', 'Fibra'],
-    image: '/images/menu-h.jpg',
+    image: '/images/menu-h.png',
     nutritionalValues: {
       protein: '38g',
       carbs: '52g',
@@ -145,7 +145,7 @@ export const MENU_DATA = [
     description: 'Bowl de arroz integral con pollo y verduras, salsa ligera y mango.', 
     price: 12.00, 
     tags: ['Proteína', 'Sin Gluten'],
-    image: '/images/menu-i.jpg',
+    image: '/images/menu-i.png',
     nutritionalValues: {
       protein: '30g',
       carbs: '48g',
@@ -161,7 +161,7 @@ export const MENU_DATA = [
     description: 'Wrap integral de huevo, aguacate y espinaca, yogur griego natural y kiwi.', 
     price: 11.50, 
     tags: ['Vegetariano', 'Proteína'],
-    image: '/images/menu-j.jpg',
+    image: '/images/menu-j.png',
     nutritionalValues: {
       protein: '22g',
       carbs: '42g',

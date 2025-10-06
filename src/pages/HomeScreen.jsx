@@ -7,7 +7,6 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
   const [showAnimation, setShowAnimation] = useState(false);
   const [showContent, setShowContent] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [imageLoaded, setImageLoaded] = useState(false);
   
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const total = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
@@ -117,22 +116,11 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
               }}
               aria-label="Explorar menús del día"
             >
-              {/* Placeholder mientras carga */}
-              {!imageLoaded && (
-                <div className="w-full h-full bg-gradient-to-br from-emerald-200 to-teal-200 rounded-full flex items-center justify-center">
-                  <div className="text-center text-slate-600">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-2"></div>
-                    <p className="text-sm">Cargando...</p>
-                  </div>
-                </div>
-              )}
-              
               <img 
                 src={fondoInicio} 
                 alt="Comida saludable"
-                className={`w-full h-full object-cover rounded-full transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                className="w-full h-full object-cover rounded-full"
                 loading="lazy"
-                onLoad={() => setImageLoaded(true)}
                 onError={(e) => {
                   // Fallback a diseño CSS si la imagen no se encuentra
                   e.target.style.display = 'none';
