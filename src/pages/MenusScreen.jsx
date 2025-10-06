@@ -267,25 +267,27 @@ const MenusScreen = ({ setView, cart, setCart }) => {
           </button>
         </div>
 
-        {/* Carrusel de días profesional */}
-        <div className="flex justify-center space-x-3 mb-4">
-          {days.map(day => (
-            <button
-              key={day.key}
-              onClick={() => handleDayChange(day.key)}
-              className={`px-5 py-2.5 rounded-xl text-base font-medium transition-all duration-300 ${
-                selectedDay === day.key
-                  ? 'bg-emerald-500 text-white shadow-lg transform scale-105 animate-pulse-slow'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-md border border-gray-300 hover:scale-105'
-              }`}
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: '600'
-              }}
-            >
-              {day.label}
-            </button>
-          ))}
+        {/* Carrusel de días profesional - Responsive */}
+        <div className="flex justify-center space-x-3 sm:space-x-4 mb-4 px-2 sm:px-0 overflow-x-auto">
+          <div className="flex space-x-3 sm:space-x-4 min-w-max">
+            {days.map(day => (
+              <button
+                key={day.key}
+                onClick={() => handleDayChange(day.key)}
+                className={`px-4 py-3 sm:px-6 sm:py-3.5 md:px-8 md:py-4 rounded-[1.5rem] sm:rounded-[2rem] text-base sm:text-lg font-medium transition-all duration-300 whitespace-nowrap ${
+                  selectedDay === day.key
+                    ? 'bg-emerald-500 text-white shadow-lg transform scale-105 animate-pulse-slow'
+                    : 'bg-white/80 text-gray-500/60 hover:bg-gray-100 hover:text-gray-500 hover:shadow-md border border-gray-300/60 hover:scale-105'
+                }`}
+                style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: '600'
+                }}
+              >
+                {day.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Barra de búsqueda profesional */}
@@ -313,7 +315,7 @@ const MenusScreen = ({ setView, cart, setCart }) => {
           return (
             <div 
               key={menu.id} 
-              className={`bg-white/90 backdrop-blur-sm rounded-2xl p-3 shadow-lg border border-white/40 hover:shadow-xl hover:bg-white/95 hover:scale-[1.02] transition-all duration-500 transform group ${
+              className={`bg-white/90 backdrop-blur-sm rounded-2xl p-3 shadow-lg border-2 border-gray-200 hover:shadow-xl hover:bg-white/95 hover:scale-[1.02] hover:border-emerald-300 transition-all duration-500 transform group ${
                 isFiltering ? 'animate-fade-out' : 'animate-menu-card'
               }`}
               style={{
@@ -339,7 +341,7 @@ const MenusScreen = ({ setView, cart, setCart }) => {
                       fontWeight: '700',
                       letterSpacing: '-0.01em'
                     }}>{menu.name}</h3>
-                    <span className="text-base font-black text-emerald-600" style={{
+                    <span className="text-base font-black text-emerald-500" style={{
                       fontFamily: 'Inter, sans-serif',
                       fontWeight: '900'
                     }}>${menu.price.toFixed(2)}</span>
