@@ -229,6 +229,7 @@ const MenusScreen = ({ setView, cart, setCart }) => {
                     src={selectedMenu.image} 
                     alt={selectedMenu.name}
                     className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
                     onError={(e) => {
                       e.target.style.display = 'none';
                       e.target.nextSibling.style.display = 'flex';
@@ -473,6 +474,7 @@ const MenusScreen = ({ setView, cart, setCart }) => {
                       src={menu.image} 
                       alt={menu.name}
                       className="absolute inset-0 w-full h-full object-cover"
+                      loading="lazy"
                       onError={(e) => {
                         e.target.style.display = 'none';
                         e.target.nextSibling.style.display = 'flex';
