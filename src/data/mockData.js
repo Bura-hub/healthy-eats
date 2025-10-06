@@ -1,104 +1,173 @@
-// Datos simulados de menús (Mock Data de alta fidelidad)
+// Datos simulados de menús (Mock Data de alta fidelidad) - CORREGIDOS según especificaciones
 export const MENU_DATA = [
+  // DÍA 1
   { 
     id: 1, 
     day: 'Día 1', 
     name: 'Menú A', 
     kcal: 525, 
-    description: 'Ensalada tibia de garbanzos con verduras, pollo a la plancha, arroz integral y mandarina.', 
+    description: 'Ensalada tibia de garbanzos con verduras, pechuga de pollo a la plancha, arroz integral y mandarina.', 
     price: 12.50, 
     tags: ['Proteína', 'Bajo en Grasa'],
-    image: '/images/menu-a.jpg'
+    image: '/images/menu-a.jpg',
+    nutritionalValues: {
+      protein: '32g',
+      carbs: '45g',
+      fat: '12g',
+      fiber: '8g'
+    }
   },
   { 
     id: 2, 
     day: 'Día 1', 
     name: 'Menú B', 
     kcal: 455, 
-    description: 'Wrap integral con atún y aguacate, bastones de zanahoria y apio, yogur natural.', 
+    description: 'Wrap integral con atún y aguacate, bastones de zanahoria y apio, y yogur natural.', 
     price: 10.00, 
     tags: ['Sin Gluten', 'Vegetariano'],
-    image: '/images/menu-b.jpg'
+    image: '/images/menu-b.jpg',
+    nutritionalValues: {
+      protein: '28g',
+      carbs: '38g',
+      fat: '18g',
+      fiber: '6g'
+    }
   },
+  
+  // DÍA 2
   { 
     id: 3, 
     day: 'Día 2', 
-    name: 'Menú C', 
-    kcal: 610, 
-    description: 'Lentejas estofadas con verduras y cúrcuma, salmón al horno y una rebanada de pan integral.', 
-    price: 14.50, 
+    name: 'Menú A', 
+    kcal: 425, 
+    description: 'Lentejas guisadas con verduras, huevo duro, ensalada fresca y manzana verde.', 
+    price: 11.50, 
     tags: ['Proteína', 'Fibra'],
-    image: '/images/menu-c.jpg'
+    image: '/images/menu-c.jpg',
+    nutritionalValues: {
+      protein: '24g',
+      carbs: '52g',
+      fat: '8g',
+      fiber: '12g'
+    }
   },
   { 
     id: 4, 
     day: 'Día 2', 
-    name: 'Menú D', 
-    kcal: 490, 
-    description: 'Sopa de tomate y albahaca, bocadillo de pavo y aguacate en pan de centeno.', 
-    price: 9.50, 
-    tags: ['Bajo en Grasa'],
-    image: '/images/menu-d.jpg'
+    name: 'Menú B', 
+    kcal: 480, 
+    description: 'Ensalada de quinua con pollo y verduras, pan integral y uvas.', 
+    price: 13.00, 
+    tags: ['Proteína', 'Sin Gluten'],
+    image: '/images/menu-d.jpg',
+    nutritionalValues: {
+      protein: '35g',
+      carbs: '42g',
+      fat: '14g',
+      fiber: '7g'
+    }
   },
+  
+  // DÍA 3
   { 
     id: 5, 
     day: 'Día 3', 
-    name: 'Menú E', 
-    kcal: 540, 
-    description: 'Tazón de quinoa con pollo, espinacas, nueces y aderezo de limón.', 
-    price: 13.00, 
-    tags: ['Proteína', 'Sin Gluten'],
-    image: '/images/menu-e.jpg'
+    name: 'Menú A', 
+    kcal: 435, 
+    description: 'Arroz con verduras, tortilla de huevo con espinaca y banano.', 
+    price: 9.50, 
+    tags: ['Vegetariano', 'Bajo en Grasa'],
+    image: '/images/menu-e.jpg',
+    nutritionalValues: {
+      protein: '18g',
+      carbs: '58g',
+      fat: '9g',
+      fiber: '5g'
+    }
   },
   { 
     id: 6, 
     day: 'Día 3', 
-    name: 'Menú F', 
-    kcal: 410, 
-    description: 'Crema de calabaza, tortilla de claras con champiñones y una pieza de fruta.', 
-    price: 8.50, 
-    tags: ['Vegetariano', 'Bajo en Carbohidratos'],
-    image: '/images/menu-f.jpg'
+    name: 'Menú B', 
+    kcal: 400, 
+    description: 'Arepa integral rellena de pollo, ensalada de repollo y zanahoria, y piña.', 
+    price: 10.50, 
+    tags: ['Proteína', 'Sin Gluten'],
+    image: '/images/menu-f.jpg',
+    nutritionalValues: {
+      protein: '26g',
+      carbs: '38g',
+      fat: '12g',
+      fiber: '6g'
+    }
   },
+  
+  // DÍA 4
   { 
     id: 7, 
-    day: 'Día 4', 
-    name: 'Menú G', 
-    kcal: 580, 
-    description: 'Curry de verduras y tofu con arroz basmati integral, acompañado de té verde.', 
-    price: 11.50, 
-    tags: ['Vegetariano', 'Vegano'],
-    image: '/images/menu-g.jpg'
+    day: 'Día 4',
+    name: 'Menú A', 
+    kcal: 380, 
+    description: 'Sopa de verduras ligera, filete de pescado al horno, puré de papa y naranja.', 
+    price: 14.50, 
+    tags: ['Proteína', 'Bajo en Grasa'],
+    image: '/images/menu-g.jpg',
+    nutritionalValues: {
+      protein: '28g',
+      carbs: '35g',
+      fat: '8g',
+      fiber: '6g'
+    }
   },
   { 
     id: 8, 
     day: 'Día 4', 
-    name: 'Menú H', 
-    kcal: 470, 
-    description: 'Pechuga de pavo rellena de espárragos y queso fresco, con puré de brócoli.', 
-    price: 13.50, 
-    tags: ['Proteína', 'Sin Gluten'],
-    image: '/images/menu-h.jpg'
+    name: 'Menú B', 
+    kcal: 630, 
+    description: 'Ensalada de pasta integral con atún y espinaca, pera y frutos secos.', 
+    price: 15.00, 
+    tags: ['Proteína', 'Fibra'],
+    image: '/images/menu-h.jpg',
+    nutritionalValues: {
+      protein: '38g',
+      carbs: '52g',
+      fat: '22g',
+      fiber: '9g'
+    }
   },
+  
+  // DÍA 5
   { 
     id: 9, 
     day: 'Día 5', 
-    name: 'Menú I', 
-    kcal: 650, 
-    description: 'Pasta integral con salsa boloñesa de lentejas y una ensalada pequeña de rúcula.', 
+    name: 'Menú A', 
+    kcal: 460, 
+    description: 'Bowl de arroz integral con pollo y verduras, salsa ligera y mango.', 
     price: 12.00, 
-    tags: ['Fibra', 'Vegano'],
-    image: '/images/menu-i.jpg'
+    tags: ['Proteína', 'Sin Gluten'],
+    image: '/images/menu-i.jpg',
+    nutritionalValues: {
+      protein: '30g',
+      carbs: '48g',
+      fat: '12g',
+      fiber: '7g'
+    }
   },
   { 
     id: 10, 
     day: 'Día 5', 
-    name: 'Menú J', 
-    kcal: 515, 
-    description: 'Brochetas de pollo y pimientos, patatas asadas con hierbas y agua de limón.', 
-    price: 14.00, 
-    tags: ['Proteína', 'Bajo en Grasa'],
-    image: '/images/menu-j.jpg'
+    name: 'Menú B', 
+    kcal: 445, 
+    description: 'Wrap integral de huevo, aguacate y espinaca, yogur griego natural y kiwi.', 
+    price: 11.50, 
+    tags: ['Vegetariano', 'Proteína'],
+    image: '/images/menu-j.jpg',
+    nutritionalValues: {
+      protein: '22g',
+      carbs: '42g',
+      fat: '18g',
+      fiber: '8g'
+    }
   },
 ];
 

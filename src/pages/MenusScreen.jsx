@@ -156,7 +156,7 @@ const MenusScreen = ({ setView, cart, setCart }) => {
 
             {/* Imagen del plato en el modal */}
             <div className="mb-6">
-              <div className="w-full h-48 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-2xl overflow-hidden border-2 border-emerald-300/50 shadow-lg relative">
+              <div className="w-full h-48 bg-gray-100 rounded-xl overflow-hidden shadow-lg relative">
                 {selectedMenu.image && (
                   <img 
                     src={selectedMenu.image} 
@@ -169,21 +169,53 @@ const MenusScreen = ({ setView, cart, setCart }) => {
                   />
                 )}
                 <div 
-                  className={`absolute inset-0 w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-100 to-teal-100 ${selectedMenu.image ? 'hidden' : 'flex'}`}
+                  className={`absolute inset-0 w-full h-full flex items-center justify-center bg-gray-100 ${selectedMenu.image ? 'hidden' : 'flex'}`}
                   style={{ display: selectedMenu.image ? 'none' : 'flex' }}
                 >
-                  <Icon name="MenuList" className="w-16 h-16 text-emerald-700" />
+                  <Icon name="MenuList" className="w-16 h-16 text-gray-400" />
                 </div>
               </div>
             </div>
 
             {/* Información nutricional profesional */}
-            <p className="text-sm text-slate-500 mb-6 font-medium" style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: '500'
-            }}>
-              Calorías aprox. {selectedMenu.kcal} • Porción 400g
-            </p>
+            <div className="mb-6">
+              <p className="text-sm text-slate-500 mb-4 font-medium" style={{
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: '500'
+              }}>
+                Calorías aprox. {selectedMenu.kcal} • Porción 400g
+              </p>
+              
+              {/* Valores nutricionales detallados */}
+              {selectedMenu.nutritionalValues && (
+                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                  <h4 className="text-sm font-bold text-slate-700 mb-3" style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: '700'
+                  }}>
+                    Valores Nutricionales
+                  </h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-slate-600 font-medium">Proteínas</span>
+                      <span className="text-xs font-bold text-slate-800">{selectedMenu.nutritionalValues.protein}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-slate-600 font-medium">Carbohidratos</span>
+                      <span className="text-xs font-bold text-slate-800">{selectedMenu.nutritionalValues.carbs}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-slate-600 font-medium">Grasas</span>
+                      <span className="text-xs font-bold text-slate-800">{selectedMenu.nutritionalValues.fat}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-slate-600 font-medium">Fibra</span>
+                      <span className="text-xs font-bold text-slate-800">{selectedMenu.nutritionalValues.fiber}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Ingredientes profesionales */}
             <div className="mb-6">
@@ -284,7 +316,7 @@ const MenusScreen = ({ setView, cart, setCart }) => {
       
       {/* Header profesional */}
       <div className="relative z-10 px-4 pt-10 pb-4 sticky top-0 z-10 backdrop-blur-md bg-white/80 border-b border-white/20">
-        <div className="flex items-center justify-between mb-4">
+        <div className="mb-4">
           <div className="space-y-1">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-800 tracking-tight leading-tight" style={{
               fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
@@ -305,9 +337,6 @@ const MenusScreen = ({ setView, cart, setCart }) => {
               Descubre opciones frescas de hoy
             </p>
           </div>
-          <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-            <Icon name="Settings" className="w-6 h-6 text-gray-400" />
-          </button>
         </div>
 
         {/* Carrusel de días profesional - Responsive */}
@@ -366,29 +395,29 @@ const MenusScreen = ({ setView, cart, setCart }) => {
                 animationFillMode: 'both'
               }}
             >
-              <div className="flex items-start space-x-3">
+              <div className="flex items-start space-x-4">
                 {/* Imagen del plato profesional */}
                 <div 
-                  className="w-20 h-20 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-2xl flex-shrink-0 cursor-pointer border-2 border-emerald-300/50 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group-hover:border-emerald-400 overflow-hidden relative"
+                  className="w-24 h-24 bg-gray-100 rounded-xl flex-shrink-0 cursor-pointer shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 overflow-hidden relative"
                   onClick={() => setSelectedMenu(menu)}
                 >
                   {menu.image ? (
                     <img 
                       src={menu.image} 
                       alt={menu.name}
-                      className="absolute inset-0 w-full h-full object-cover rounded-2xl"
+                      className="absolute inset-0 w-full h-full object-cover"
                       onError={(e) => {
                         e.target.style.display = 'none';
                         e.target.nextSibling.style.display = 'flex';
                       }}
                     />
                   ) : null}
-                  <div 
-                    className={`absolute inset-0 w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-100 to-teal-100 rounded-2xl ${menu.image ? 'hidden' : 'flex'}`}
-                    style={{ display: menu.image ? 'none' : 'flex' }}
-                  >
-                    <Icon name="MenuList" className="w-8 h-8 text-emerald-700 group-hover:text-emerald-800 transition-colors duration-300" />
-                  </div>
+                      <div 
+                        className={`absolute inset-0 w-full h-full flex items-center justify-center bg-gray-100 ${menu.image ? 'hidden' : 'flex'}`}
+                        style={{ display: menu.image ? 'none' : 'flex' }}
+                      >
+                        <Icon name="MenuList" className="w-10 h-10 text-gray-400" />
+                      </div>
                 </div>
 
                 {/* Información del plato profesional */}

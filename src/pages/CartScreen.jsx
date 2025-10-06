@@ -92,13 +92,13 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
               fontFamily: 'Inter, sans-serif',
               fontWeight: '700'
             }}>
-              ¡Tu carrito está triste!
+              Carrito vacío
             </h2>
             <p className="text-slate-500 mb-6 sm:mb-8 text-base sm:text-lg md:text-xl px-4" style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: '500'
             }}>
-              No tienes platos seleccionados.
+              Elige un plato para empezar
             </p>
         <button
           onClick={() => setView('menus')}
@@ -211,8 +211,24 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
                 <div className="flex items-center space-x-3 sm:space-x-4">
                   {/* Imagen del Plato con Badge de Cantidad */}
                   <div className="relative">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-2xl flex items-center justify-center flex-shrink-0 border-2 border-emerald-300/50 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group-hover:border-emerald-400">
-                      <Icon name="MenuList" className="w-8 h-8 sm:w-10 sm:h-10 text-emerald-600" />
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 overflow-hidden relative">
+                      {item.image ? (
+                        <img 
+                          src={item.image} 
+                          alt={item.name}
+                          className="absolute inset-0 w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                          }}
+                        />
+                      ) : null}
+                      <div 
+                        className={`absolute inset-0 w-full h-full flex items-center justify-center bg-gray-100 ${item.image ? 'hidden' : 'flex'}`}
+                        style={{ display: item.image ? 'none' : 'flex' }}
+                      >
+                        <Icon name="MenuList" className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
+                      </div>
                     </div>
                     {/* Badge de Cantidad */}
                     <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full flex items-center justify-center shadow-lg border-2 border-white">
