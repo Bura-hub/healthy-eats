@@ -67,7 +67,7 @@ const App = () => {
       case 'cart':
         return <CartScreen setView={setView} cart={cart} setCart={setCart} address={address} />;
       case 'delivery':
-        return <DeliveryScreen setView={setView} address={address} setAddress={setAddress} />;
+        return <DeliveryScreen setView={setView} setAddress={setAddress} />;
       case 'checkout':
         return <CheckoutScreen setView={setView} cart={cart} address={address} setCart={setCart} setOrderId={setOrderId} />;
       case 'confirmation':

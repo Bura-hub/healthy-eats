@@ -175,17 +175,33 @@ export const MENU_DATA = [
 export const SAVED_ADDRESSES = [
   { 
     id: 1,
-    line1: 'Calle Falsa 123', 
-    city: 'Ciudad Modelo', 
+    name: 'Casa',
+    line1: 'Av. Salud 123, Piso 2, Dpto. B', 
+    city: 'Ciudad Verde', 
     postalCode: '10001',
-    isDefault: false
+    isDefault: true,
+    deliveryTime: '30-45 min',
+    icon: 'Home'
   },
   { 
     id: 2,
-    line1: 'Avenida Principal #45', 
+    name: 'Trabajo',
+    line1: 'Calle Saludable 45, Torre A', 
     city: 'Zona Centro', 
     postalCode: '10002',
-    isDefault: true
+    isDefault: false,
+    deliveryTime: '25-35 min',
+    icon: 'Building'
+  },
+  { 
+    id: 3,
+    name: 'Gimnasio',
+    line1: 'Ruta Verde 800, Local 3', 
+    city: 'Distrito Fitness', 
+    postalCode: '10003',
+    isDefault: false,
+    deliveryTime: '40-55 min',
+    icon: 'MapPin'
   },
 ];
 

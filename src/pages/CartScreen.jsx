@@ -57,7 +57,7 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
 
         <div className="relative z-10 px-4 sm:px-6 md:px-8 lg:px-12 pt-6 md:pt-8 lg:pt-12 flex-1 flex flex-col justify-center max-w-7xl mx-auto w-full">
           {/* Header profesional con animación */}
-          <div className="mb-6 md:mb-8 animate-slide-down">
+          <div className="mb-6 md:mb-8">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-800 tracking-tight leading-tight" style={{
