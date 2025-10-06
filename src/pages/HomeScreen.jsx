@@ -179,17 +179,30 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
         {/* Botón CTA Principal - Responsive */}
         <div className="space-y-3 md:space-y-4 fade-in-up-delay-3">
           {isCartEmpty ? (
-            <button 
-              onClick={() => setView('menus')} 
-              className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-4 md:py-5 lg:py-6 px-5 md:px-6 lg:px-8 rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] shadow-lg md:shadow-xl hover:shadow-xl md:hover:shadow-2xl transition-all duration-200 active:scale-[0.98] group min-h-[56px] md:min-h-[64px] lg:min-h-[72px]"
-              aria-label="Carrito vacío - elige un plato para empezar"
-            >
-              <div className="flex items-center justify-center space-x-2 md:space-x-3">
-                <Icon name="ShoppingCart" className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 group-hover:rotate-12 transition-transform duration-200" />
-                <span className="text-base md:text-lg lg:text-xl">Carrito vacío</span>
-                <Icon name="ArrowRight" className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 group-hover:translate-x-1 transition-transform duration-200" />
+            <div className="space-y-4">
+              <div className="bg-amber-50/80 border border-amber-200 rounded-lg p-3 md:p-4">
+                <div className="flex items-center justify-center space-x-2">
+                  <Icon name="AlertTriangle" className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                  <p className="text-amber-700 text-sm md:text-base font-medium text-center" style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: '500'
+                  }}>
+                    Carrito vacío • Agrega un plato para continuar
+                  </p>
+                </div>
               </div>
-            </button>
+              <button 
+                onClick={() => setView('menus')} 
+                className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-4 md:py-5 lg:py-6 px-5 md:px-6 lg:px-8 rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] shadow-lg md:shadow-xl hover:shadow-xl md:hover:shadow-2xl transition-all duration-200 active:scale-[0.98] group min-h-[56px] md:min-h-[64px] lg:min-h-[72px]"
+                aria-label="Carrito vacío - elige un plato para empezar"
+              >
+                <div className="flex items-center justify-center space-x-2 md:space-x-3">
+                  <Icon name="ShoppingCart" className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 group-hover:rotate-12 transition-transform duration-200" />
+                  <span className="text-base md:text-lg lg:text-xl">Carrito vacío</span>
+                  <Icon name="ArrowRight" className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 group-hover:translate-x-1 transition-transform duration-200" />
+                </div>
+              </button>
+            </div>
           ) : (
             <button 
               onClick={() => setView('cart')} 

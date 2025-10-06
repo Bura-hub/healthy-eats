@@ -47,17 +47,17 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
 
   if (cartCount === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 relative overflow-hidden pb-20 flex flex-col">
-        {/* Fondo responsive */}
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 relative overflow-hidden pb-20 flex flex-col animate-fade-in">
+        {/* Fondo responsive con animación */}
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-4 md:top-32 md:left-8 w-32 h-32 md:w-48 md:h-48 bg-gradient-to-br from-emerald-200/15 to-teal-200/15 rounded-full blur-2xl"></div>
-          <div className="absolute bottom-40 right-4 md:bottom-48 md:right-8 w-24 h-24 md:w-36 md:h-36 bg-gradient-to-br from-lime-200/15 to-yellow-200/15 rounded-full blur-xl"></div>
-          <div className="hidden lg:block absolute top-1/3 right-1/4 w-32 h-32 bg-gradient-to-br from-green-200/10 to-emerald-200/10 rounded-full blur-xl"></div>
+          <div className="absolute top-20 left-4 md:top-32 md:left-8 w-32 h-32 md:w-48 md:h-48 bg-gradient-to-br from-emerald-200/15 to-teal-200/15 rounded-full blur-2xl animate-float-slow"></div>
+          <div className="absolute bottom-40 right-4 md:bottom-48 md:right-8 w-24 h-24 md:w-36 md:h-36 bg-gradient-to-br from-lime-200/15 to-yellow-200/15 rounded-full blur-xl animate-float-reverse"></div>
+          <div className="hidden lg:block absolute top-1/3 right-1/4 w-32 h-32 bg-gradient-to-br from-green-200/10 to-emerald-200/10 rounded-full blur-xl animate-float-slow"></div>
         </div>
 
         <div className="relative z-10 px-4 sm:px-6 md:px-8 lg:px-12 pt-6 md:pt-8 lg:pt-12 flex-1 flex flex-col justify-center max-w-7xl mx-auto w-full">
-          {/* Header profesional */}
-          <div className="mb-6 md:mb-8">
+          {/* Header profesional con animación */}
+          <div className="mb-6 md:mb-8 animate-slide-down">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-800 tracking-tight leading-tight" style={{
@@ -83,34 +83,80 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
             </div>
           </div>
 
-          {/* Empty State */}
+          {/* Empty State con animaciones profesionales */}
           <div className="flex-1 flex flex-col items-center justify-center text-center">
-            <div className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full flex items-center justify-center mb-4 sm:mb-6 animate-bounce-subtle">
-              <Icon name="ShoppingCart" className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-emerald-600" />
+            {/* Ilustración principal del carrito vacío */}
+            <div className="mb-6 sm:mb-8 md:mb-10 animate-scale-in">
+              <div className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 text-emerald-500/20 animate-pulse-slow">
+                <Icon name="EmptyCart" className="w-full h-full" />
+              </div>
             </div>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-800 mb-2 sm:mb-3" style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: '700'
-            }}>
-              Carrito vacío
-            </h2>
-            <p className="text-slate-500 mb-6 sm:mb-8 text-base sm:text-lg md:text-xl px-4" style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: '500'
-            }}>
-              Elige un plato para empezar
-            </p>
-        <button
-          onClick={() => setView('menus')}
-              className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-2xl font-bold text-base sm:text-lg md:text-xl shadow-lg hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 transform hover:scale-105 border-2 border-emerald-400/20 backdrop-blur-sm animate-glow"
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: '700'
-              }}
-              aria-label="Ver menús del día"
-        >
-          Ver Menús del Día
-        </button>
+            
+            {/* Mensaje profesional con diseño mejorado */}
+            <div className="text-center space-y-4 sm:space-y-6 animate-fade-in-up">
+              <div className="space-y-2 sm:space-y-3">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800 leading-tight" style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: '800',
+                  letterSpacing: '-0.02em'
+                }}>
+                  Tu carrito está vacío
+                </h2>
+                <p className="text-base sm:text-lg md:text-xl text-slate-600 font-medium max-w-md mx-auto leading-relaxed" style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: '500'
+                }}>
+                  Descubre nuestros menús saludables y comienza a armar tu pedido perfecto
+                </p>
+              </div>
+              
+              {/* Botón CTA profesional */}
+              <div className="pt-2 animate-fade-in-up-delay">
+                <button
+                  onClick={() => setView('menus')}
+                  className="inline-flex items-center justify-center bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-8 sm:px-10 md:px-12 py-4 sm:py-5 md:py-6 rounded-2xl font-bold text-lg sm:text-xl md:text-2xl shadow-xl hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 transform hover:scale-105 active:scale-95 border border-emerald-500/30 backdrop-blur-sm group relative overflow-hidden"
+                  style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: '700'
+                  }}
+                  aria-label="Explorar menús saludables"
+                >
+                  {/* Efecto de brillo */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                  
+                  <div className="relative z-10 flex items-center space-x-3 sm:space-x-4">
+                    <Icon name="MenuList" className="w-6 h-6 sm:w-7 sm:h-7 group-hover:rotate-12 transition-transform duration-300" />
+                    <span>Explorar Menús</span>
+                    <Icon name="ArrowRight" className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform duration-300" />
+                  </div>
+                </button>
+              </div>
+              
+              {/* Información adicional profesional */}
+              <div className="pt-4 animate-fade-in-up-delay-2">
+                <div className="flex items-center justify-center space-x-6 text-sm sm:text-base text-slate-500">
+                  <div className="flex items-center space-x-2">
+                    <Icon name="Leaf" className="w-4 h-4 text-emerald-500" />
+                    <span className="font-medium" style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}>
+                      100% Saludable
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Icon name="Clock" className="w-4 h-4 text-emerald-500" />
+                    <span className="font-medium" style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}>
+                      Entrega Rápida
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Elementos decorativos animados */}
+            <div className="mt-8 flex space-x-2 animate-fade-in-up-delay-2">
+              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></div>
+              <div className="w-2 h-2 bg-teal-400 rounded-full animate-ping" style={{ animationDelay: '0.2s' }}></div>
+              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-ping" style={{ animationDelay: '0.4s' }}></div>
+            </div>
           </div>
         </div>
       </div>
@@ -283,10 +329,10 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
                       <div className="flex items-center bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200 rounded-full px-2 sm:px-3 py-1 hover:border-emerald-300 hover:from-emerald-50 hover:to-emerald-100 transition-all duration-300 shadow-sm hover:shadow-md">
               <button
                 onClick={() => handleUpdateQuantity(item.id, -1)}
-                          className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center hover:bg-white rounded-full transition-all duration-200 hover:scale-110 active:scale-95 shadow-sm hover:shadow-md"
+                className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center hover:bg-white rounded-full transition-all duration-200 hover:scale-110 active:scale-95 shadow-sm hover:shadow-md min-h-[44px] min-w-[44px]"
                 aria-label={`Disminuir cantidad de ${item.name}`}
               >
-                          <Icon name="Minus" className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600 hover:text-emerald-600 transition-colors" />
+                <Icon name="Minus" className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 hover:text-emerald-600 transition-colors" />
               </button>
                         <span className="text-xs sm:text-sm font-black text-slate-800 mx-2 sm:mx-3 min-w-[20px] text-center" style={{
                           fontFamily: 'Inter, sans-serif',
@@ -296,21 +342,21 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
                         </span>
               <button
                 onClick={() => handleUpdateQuantity(item.id, 1)}
-                          className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center hover:bg-white rounded-full transition-all duration-200 hover:scale-110 active:scale-95 shadow-sm hover:shadow-md"
+                className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center hover:bg-white rounded-full transition-all duration-200 hover:scale-110 active:scale-95 shadow-sm hover:shadow-md min-h-[44px] min-w-[44px]"
                 aria-label={`Aumentar cantidad de ${item.name}`}
               >
-                          <Icon name="Plus" className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600 hover:text-emerald-600 transition-colors" />
-                        </button>
+                <Icon name="Plus" className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 hover:text-emerald-600 transition-colors" />
+              </button>
                       </div>
                       
                       {/* Botón Eliminar Mejorado */}
                       <button
                         onClick={() => handleRemoveItem(item.id)}
-                        className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center text-gray-400 hover:text-red-500 transition-all duration-300 hover:scale-110 active:scale-95 hover:bg-red-50 rounded-full border border-transparent hover:border-red-200 shadow-sm hover:shadow-md"
+                        className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-gray-400 hover:text-red-500 transition-all duration-300 hover:scale-110 active:scale-95 hover:bg-red-50 rounded-full border border-transparent hover:border-red-200 shadow-sm hover:shadow-md min-h-[44px] min-w-[44px]"
                         aria-label={`Eliminar ${item.name}`}
                       >
-                        <Icon name="X" className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
+                        <Icon name="X" className="w-5 h-5 sm:w-6 sm:h-6" />
+                      </button>
             </div>
           </div>
       </div>

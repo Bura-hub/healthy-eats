@@ -143,6 +143,47 @@ const Icon = ({ name, className = "w-6 h-6", ...props }) => {
         <path d="M6 6l12 12"/>
       </svg>
     ),
+    EmptyCart: (
+      <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        {/* Carrito principal con diseño moderno */}
+        <path d="M3 3h2.5l2.8 13.2a1.8 1.8 0 0 0 1.7 1.3h8.5a1.8 1.8 0 0 0 1.7-1.3L22 6H6" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="1.2" 
+              opacity="0.9"/>
+        
+        {/* Ruedas del carrito con diseño mejorado */}
+        <circle cx="8.5" cy="20.5" r="1.8" fill="currentColor" opacity="0.7"/>
+        <circle cx="19.5" cy="20.5" r="1.8" fill="currentColor" opacity="0.7"/>
+        
+        {/* Detalles del carrito */}
+        <path d="M6 6h15" strokeWidth="0.8" opacity="0.5"/>
+        <path d="M8.5 20.5h11" strokeWidth="0.6" opacity="0.4"/>
+        
+        {/* Indicador de vacío elegante */}
+        <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.4"/>
+        <path d="M9 9L15 15" strokeWidth="1" opacity="0.5" strokeDasharray="1.5,1.5"/>
+        <path d="M15 9L9 15" strokeWidth="1" opacity="0.5" strokeDasharray="1.5,1.5"/>
+        
+        {/* Sombra mejorada */}
+        <ellipse cx="12" cy="22.8" rx="10" ry="2" fill="currentColor" opacity="0.06"/>
+        
+        {/* Detalles decorativos sutiles */}
+        <circle cx="12" cy="8" r="0.8" fill="currentColor" opacity="0.3"/>
+        <path d="M10 8h4" strokeWidth="0.6" opacity="0.3"/>
+        
+        {/* Líneas de estructura */}
+        <path d="M5 10h14" strokeWidth="0.5" opacity="0.2"/>
+        <path d="M5 14h14" strokeWidth="0.5" opacity="0.2"/>
+        
+        {/* Efecto de profundidad */}
+        <path d="M3 3h2.5l2.8 13.2a1.8 1.8 0 0 0 1.7 1.3h8.5a1.8 1.8 0 0 0 1.7-1.3L22 6H6" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="0.6" 
+              opacity="0.3"/>
+      </svg>
+    ),
   };
   
   return icons[name] || null;

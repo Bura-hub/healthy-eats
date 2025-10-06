@@ -7,7 +7,7 @@ const ConfirmationScreen = ({ setView, orderId, address }) => {
     <div className="p-4 pt-10 pb-20 min-h-screen flex flex-col items-center justify-center text-center bg-primary-50">
       <Icon name="CheckCircle" className="w-24 h-24 text-primary-500 mb-6 animate-pulse-slow" />
       <h1 className="text-4xl font-extrabold text-primary-800 mb-3">¡Pedido Confirmado!</h1>
-      <p className="text-xl text-gray-700 font-semibold mb-2">Tu orden ha sido colocada (Simulación).</p>
+      <p className="text-xl text-gray-700 font-semibold mb-2">Pedido realizado. Número: {orderId}. Tiempo estimado: 35–45 min.</p>
       
       <div className="card p-6 w-full max-w-sm space-y-3 mt-6">
         <p className="text-sm text-gray-500">Número de Pedido (Simulado):</p>

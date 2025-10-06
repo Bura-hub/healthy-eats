@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Icon from '../components/Icon';
+import CancelOrderModal from '../components/CancelOrderModal';
 
 // Componente: Seguimiento de Pedido (Tracking Simulado)
-const TrackingScreen = ({ setView, orderId }) => {
+const TrackingScreen = ({ setView, orderId, setOrderId }) => {
   const [step, setStep] = useState(1); // 1: Preparando, 2: En Camino, 3: Entregado
   const [statusText, setStatusText] = useState('Recibido y Confirmado');
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   useEffect(() => {
     // Simulación de pasos de seguimiento con temporizador
@@ -22,6 +24,13 @@ const TrackingScreen = ({ setView, orderId }) => {
 
     return () => clearTimeout(timer);
   }, [step]);
+
+  const handleCancelOrder = () => {
+    // Simular cancelación del pedido
+    setOrderId(null);
+    setView('home');
+    alert('Pedido cancelado exitosamente. Se procesará el reembolso.');
+  };
 
   const steps = [
     { id: 1, title: 'Pedido Recibido', subtitle: 'Confirmado por la cocina.', icon: 'CheckCircle' },
@@ -62,7 +71,23 @@ const TrackingScreen = ({ setView, orderId }) => {
         ))}
       </div>
 
-      <div className="mt-10">
+      <div className="mt-10 space-y-3">
+        {step < 3 && (
+          <button
+            onClick={() => setShowCancelModal(true)}
+            className="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-4 rounded-2xl font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 border border-red-400/50 backdrop-blur-sm group"
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: '700'
+            }}
+            aria-label="Cancelar pedido"
+          >
+            <div className="flex items-center justify-center space-x-2">
+              <Icon name="X" className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+              <span>Cancelar Pedido</span>
+            </div>
+          </button>
+        )}
         <button
           onClick={() => setView('home')}
           className="btn-primary w-full"
@@ -71,6 +96,14 @@ const TrackingScreen = ({ setView, orderId }) => {
           Volver a Inicio
         </button>
       </div>
+
+      {/* Modal de confirmación para cancelar */}
+      <CancelOrderModal
+        isVisible={showCancelModal}
+        onClose={() => setShowCancelModal(false)}
+        onConfirm={handleCancelOrder}
+        orderId={orderId}
+      />
     </div>
   );
 };

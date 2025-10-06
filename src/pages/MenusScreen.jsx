@@ -58,6 +58,65 @@ const MenusScreen = ({ setView, cart, setCart }) => {
       setCart([...cart, { ...menu, quantity: 1, extras: [] }]);
     }
     
+    // Micro-animación profesional: efecto de "disparo" hacia el carrito
+    const button = document.querySelector(`[data-menu-id="${menu.id}"]`);
+    if (button) {
+      // Crear efecto de "explosión" de partículas
+      const rect = button.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      // Crear partículas visuales
+      for (let i = 0; i < 6; i++) {
+        const particle = document.createElement('div');
+        particle.style.position = 'fixed';
+        particle.style.left = centerX + 'px';
+        particle.style.top = centerY + 'px';
+        particle.style.width = '4px';
+        particle.style.height = '4px';
+        particle.style.backgroundColor = '#10b981';
+        particle.style.borderRadius = '50%';
+        particle.style.pointerEvents = 'none';
+        particle.style.zIndex = '9999';
+        particle.style.transition = 'all 0.6s ease-out';
+        
+        document.body.appendChild(particle);
+        
+        // Animar partícula hacia diferentes direcciones
+        const angle = (i * 60) * (Math.PI / 180);
+        const distance = 50 + Math.random() * 30;
+        const endX = centerX + Math.cos(angle) * distance;
+        const endY = centerY + Math.sin(angle) * distance;
+        
+        setTimeout(() => {
+          particle.style.transform = `translate(${endX - centerX}px, ${endY - centerY}px)`;
+          particle.style.opacity = '0';
+          particle.style.scale = '0';
+        }, 10);
+        
+        // Remover partícula después de la animación
+        setTimeout(() => {
+          document.body.removeChild(particle);
+        }, 600);
+      }
+      
+      // Efecto en el botón
+      button.style.transform = 'scale(0.9)';
+      button.style.transition = 'transform 0.15s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+      button.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.5)';
+      
+      setTimeout(() => {
+        button.style.transform = 'scale(1.05)';
+        button.style.boxShadow = '0 0 30px rgba(16, 185, 129, 0.8)';
+        
+        setTimeout(() => {
+          button.style.transform = 'scale(1)';
+          button.style.transition = '';
+          button.style.boxShadow = '';
+        }, 150);
+      }, 150);
+    }
+    
     // Mostrar snackbar
     setShowSnackbarLocal(true);
     setTimeout(() => setShowSnackbarLocal(false), 4000);
@@ -86,20 +145,28 @@ const MenusScreen = ({ setView, cart, setCart }) => {
     
     return (
       <div className="fixed bottom-20 left-4 right-4 z-50 animate-slide-up-snackbar">
-        <div className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-4 py-4 rounded-2xl shadow-xl flex items-center justify-between border-2 border-emerald-400 backdrop-blur-sm">
-          <span className="font-bold" style={{
-            fontFamily: 'Inter, sans-serif',
-            fontWeight: '700'
-          }}>Añadido al carrito</span>
+        <div className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-5 rounded-3xl shadow-2xl flex items-center justify-between border-2 border-emerald-400/30 backdrop-blur-md">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+              <Icon name="CheckCircle" className="w-5 h-5 text-white" />
+            </div>
+            <span className="font-bold text-lg" style={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: '700'
+            }}>
+              ¡Añadido al carrito!
+            </span>
+          </div>
           <button 
             onClick={() => setView('cart')}
-            className="bg-white/30 px-4 py-2 rounded-xl text-sm font-bold hover:bg-white/40 transition-all duration-300 transform hover:scale-105 border border-white/50"
+            className="bg-white/25 px-4 py-2 rounded-2xl text-sm font-bold hover:bg-white/35 transition-all duration-300 transform hover:scale-105 border border-white/30 backdrop-blur-sm"
             style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: '700'
             }}
+            aria-label="Ir al carrito"
           >
-            Ir al carrito
+            Ver Carrito
           </button>
         </div>
       </div>
@@ -514,11 +581,13 @@ const MenusScreen = ({ setView, cart, setCart }) => {
                     {/* Botón Agregar profesional */}
                     <button
                       onClick={() => handleAddToCart(menu)}
-                      className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-3 py-1.5 rounded-lg font-bold hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 border border-emerald-400/20 backdrop-blur-sm active:scale-95 micro-interaction animate-glow"
+                      data-menu-id={menu.id}
+                      className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-3 py-3 rounded-lg font-bold hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 border border-emerald-400/20 backdrop-blur-sm active:scale-95 micro-interaction animate-glow min-h-[44px]"
                       style={{
                         fontFamily: 'Inter, sans-serif',
                         fontWeight: '700'
                       }}
+                      aria-label={`Agregar ${menu.name} al carrito`}
                     >
                       Agregar
                     </button>

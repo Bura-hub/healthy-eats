@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from './components/NavBar';
 import Icon from './components/Icon';
+import OfflineScreen from './components/OfflineScreen';
 import HomeScreen from './pages/HomeScreen';
 import MenusScreen from './pages/MenusScreen';
 import CartScreen from './pages/CartScreen';
@@ -19,6 +20,7 @@ const App = () => {
   const [orderId, setOrderId] = useState(null);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
+  const [isOffline, setIsOffline] = useState(false);
 
   // Efecto para controlar el snackbar
   useEffect(() => {
@@ -27,6 +29,35 @@ const App = () => {
       return () => clearTimeout(timer);
     }
   }, [showSnackbar]);
+
+  // Efecto para detectar estado offline
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
+    // Verificar estado inicial
+    setIsOffline(!navigator.onLine);
+
+    // Agregar listeners
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  // Función para manejar reintento de conexión
+  const handleRetryConnection = () => {
+    setIsOffline(false);
+    // Simular verificación de conexión
+    setTimeout(() => {
+      if (!navigator.onLine) {
+        setIsOffline(true);
+      }
+    }, 1000);
+  };
 
   // Función para renderizar la vista actual
   const renderView = () => {
@@ -42,12 +73,17 @@ const App = () => {
       case 'confirmation':
         return <ConfirmationScreen setView={setView} orderId={orderId} address={address} />;
       case 'tracking':
-        return <TrackingScreen setView={setView} orderId={orderId} />;
+        return <TrackingScreen setView={setView} orderId={orderId} setOrderId={setOrderId} />;
       case 'home':
       default:
         return <HomeScreen setView={setView} cart={cart} address={address} setShowContactModal={setShowContactModal} />;
     }
   };
+
+  // Si está offline, mostrar pantalla offline
+  if (isOffline) {
+    return <OfflineScreen onRetry={handleRetryConnection} />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center">
