@@ -1,12 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import Icon from '../components/Icon';
 import CancelOrderModal from '../components/CancelOrderModal';
+import CancelConfirmationScreen from '../components/CancelConfirmationScreen';
 
-// Componente: Seguimiento de Pedido (Tracking Simulado)
+// Componente: Seguimiento de Pedido Profesional Avanzado
 const TrackingScreen = ({ setView, orderId, setOrderId }) => {
   const [step, setStep] = useState(1); // 1: Preparando, 2: En Camino, 3: Entregado
   const [statusText, setStatusText] = useState('Recibido y Confirmado');
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
+  const [showAnimation, setShowAnimation] = useState(false);
+  const [showContent, setShowContent] = useState(false);
+  const [showTimeline, setShowTimeline] = useState(false);
+  const [estimatedTime, setEstimatedTime] = useState(25);
+  const [deliveryPerson, setDeliveryPerson] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState('Cocina Healthy Eats');
+
+  useEffect(() => {
+    // Animaciones de entrada
+    const timer1 = setTimeout(() => setShowAnimation(true), 100);
+    const timer2 = setTimeout(() => setShowContent(true), 600);
+    const timer3 = setTimeout(() => setShowTimeline(true), 1000);
+    
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
+  }, []);
 
   useEffect(() => {
     // Simulación de pasos de seguimiento con temporizador
@@ -14,45 +35,115 @@ const TrackingScreen = ({ setView, orderId, setOrderId }) => {
     if (step < 3) {
       timer = setTimeout(() => {
         setStep(step + 1);
-      }, 5000); // Avanza cada 5 segundos
+      }, 8000); // Avanza cada 8 segundos para mejor experiencia
 
-      if (step === 1) setStatusText('Preparando el menú saludable...');
-      if (step === 2) setStatusText('¡En camino! El repartidor ya salió.');
+      if (step === 1) {
+        setStatusText('Preparando el menú saludable...');
+        setEstimatedTime(20);
+        setCurrentLocation('Cocina Healthy Eats');
+      }
+      if (step === 2) {
+        setStatusText('¡En camino! El repartidor ya salió.');
+        setEstimatedTime(15);
+        setCurrentLocation('En ruta hacia tu ubicación');
+        setDeliveryPerson({ name: 'Carlos M.', rating: 4.9, vehicle: 'Moto Verde' });
+      }
     } else if (step === 3) {
        setStatusText('¡Entregado! Gracias por tu pedido.');
+       setEstimatedTime(0);
+       setCurrentLocation('Entregado en tu ubicación');
     }
 
     return () => clearTimeout(timer);
   }, [step]);
 
   const handleCancelOrder = () => {
-    // Simular cancelación del pedido
+    // Mostrar pantalla de confirmación de cancelación
+    setShowCancelConfirmation(true);
+  };
+
+  const handleBackToMenus = () => {
     setOrderId(null);
-    setView('menus'); // Redirigir a menús para hacer nuevo pedido
-    alert('Pedido cancelado exitosamente. Se procesará el reembolso.');
+    setView('menus');
+  };
+
+  const handleCloseConfirmation = () => {
+    setShowCancelConfirmation(false);
+    setView('home');
   };
 
   const steps = [
-    { id: 1, title: 'Pedido Recibido', subtitle: 'Confirmado por la cocina.', icon: 'CheckCircle' },
-    { id: 2, title: 'En Preparación', subtitle: 'Tu menú se está cocinando.', icon: 'Clock' },
-    { id: 3, title: 'En Camino', subtitle: 'Saliendo para la entrega.', icon: 'Truck' },
-    { id: 4, title: 'Entregado', subtitle: '¡Disfruta tu Healthy Eats!', icon: 'Check' },
+    { 
+      id: 1, 
+      title: 'Pedido Recibido', 
+      subtitle: 'Confirmado por la cocina.', 
+      icon: 'CheckCircle',
+      time: 'Hace 5 min',
+      color: 'emerald',
+      completed: step >= 1
+    },
+    { 
+      id: 2, 
+      title: 'En Preparación', 
+      subtitle: 'Tu menú se está cocinando.', 
+      icon: 'Clock',
+      time: 'En progreso',
+      color: step === 2 ? 'emerald' : 'gray',
+      completed: step >= 2,
+      active: step === 2
+    },
+    { 
+      id: 3, 
+      title: 'En Camino', 
+      subtitle: 'Saliendo para la entrega.', 
+      icon: 'Truck',
+      time: step >= 3 ? 'Hace 2 min' : 'Próximo',
+      color: step >= 3 ? 'emerald' : 'gray',
+      completed: step >= 3,
+      active: step === 3
+    },
+    { 
+      id: 4, 
+      title: 'Entregado', 
+      subtitle: '¡Disfruta tu Healthy Eats!', 
+      icon: 'Check',
+      time: step >= 4 ? 'Completado' : 'Próximo',
+      color: step >= 4 ? 'emerald' : 'gray',
+      completed: step >= 4,
+      active: step === 4
+    },
   ];
 
+  // Si se está mostrando la confirmación de cancelación
+  if (showCancelConfirmation) {
+    return (
+      <CancelConfirmationScreen
+        orderId={orderId}
+        onBackToMenus={handleBackToMenus}
+        onClose={handleCloseConfirmation}
+      />
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 relative overflow-hidden pb-20 flex flex-col animate-fade-in">
-      {/* Fondo responsive con animación */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 relative overflow-hidden pb-20 flex flex-col">
+      {/* Fondo animado mejorado */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-4 md:top-32 md:left-8 w-32 h-32 md:w-48 md:h-48 bg-gradient-to-br from-emerald-200/15 to-teal-200/15 rounded-full blur-2xl animate-float-slow"></div>
-        <div className="absolute bottom-40 right-4 md:bottom-48 md:right-8 w-24 h-24 md:w-36 md:h-36 bg-gradient-to-br from-lime-200/15 to-yellow-200/15 rounded-full blur-xl animate-float-reverse"></div>
-        <div className="hidden lg:block absolute top-1/3 right-1/4 w-32 h-32 bg-gradient-to-br from-green-200/10 to-emerald-200/10 rounded-full blur-xl animate-float-slow"></div>
+        <div className="absolute top-20 left-4 md:top-32 md:left-8 w-32 h-32 md:w-48 md:h-48 bg-gradient-to-br from-emerald-200/15 to-teal-200/15 rounded-full blur-2xl animate-pulse"></div>
+        <div className="absolute bottom-40 right-4 md:bottom-48 md:right-8 w-24 h-24 md:w-36 md:h-36 bg-gradient-to-br from-lime-200/15 to-yellow-200/15 rounded-full blur-xl animate-bounce"></div>
+        <div className="hidden lg:block absolute top-1/3 right-1/4 w-32 h-32 bg-gradient-to-br from-green-200/10 to-emerald-200/10 rounded-full blur-xl animate-ping"></div>
+        
+        {/* Partículas de seguimiento */}
+        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-emerald-400 rounded-full animate-ping opacity-60" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-1/3 right-1/3 w-1.5 h-1.5 bg-teal-400 rounded-full animate-ping opacity-60" style={{animationDelay: '2s'}}></div>
+        <div className="absolute bottom-1/3 left-1/3 w-2 h-2 bg-green-400 rounded-full animate-ping opacity-60" style={{animationDelay: '3s'}}></div>
       </div>
 
       <div className="relative z-10 px-4 sm:px-6 md:px-8 lg:px-12 pt-6 md:pt-8 lg:pt-12 flex-1 flex flex-col max-w-7xl mx-auto w-full">
         {/* Header profesional con animación */}
-        <div className="mb-6 md:mb-8">
+        <div className={`mb-6 md:mb-8 transition-all duration-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <div className="flex items-center justify-between">
-            <div className="space-y-1">
+            <div className="space-y-2">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-800 tracking-tight leading-tight" style={{
                 fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
                 fontWeight: '900',
@@ -63,51 +154,152 @@ const TrackingScreen = ({ setView, orderId, setOrderId }) => {
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text'
               }}>
-                Seguimiento de Pedido
+                Seguimiento en Tiempo Real
               </h1>
-              <p className="text-slate-500 text-sm sm:text-base font-medium leading-relaxed" style={{
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: '500'
-              }}>
-                Pedido #{orderId}
-              </p>
+              <div className="flex items-center space-x-4">
+                <p className="text-slate-500 text-sm sm:text-base font-medium" style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: '500'
+                }}>
+                  Pedido #{orderId}
+                </p>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                  <span className="text-xs text-emerald-600 font-medium">En vivo</span>
+                </div>
+              </div>
             </div>
             <div className="w-8 h-8"></div>
           </div>
         </div>
 
-        {/* Estado Actual */}
-        <div className="bg-gradient-to-r from-emerald-100 to-green-100 border border-emerald-200/50 rounded-2xl md:rounded-3xl p-6 md:p-8 mb-8 md:mb-10 shadow-lg text-center">
-          <p className="text-sm md:text-base text-emerald-700 font-medium mb-2">Estado Actual:</p>
-          <p className="text-xl md:text-2xl font-bold text-emerald-800">{statusText}</p>
+        {/* Estado Actual Mejorado */}
+        <div className={`bg-gradient-to-r from-emerald-100 to-green-100 border border-emerald-200/50 rounded-2xl md:rounded-3xl p-6 md:p-8 mb-8 md:mb-10 shadow-lg transition-all duration-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-3 mb-4">
+              <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full flex items-center justify-center">
+                <Icon name="Truck" className="w-6 h-6 text-white animate-bounce" />
+              </div>
+              <div>
+                <p className="text-sm md:text-base text-emerald-700 font-medium">Estado Actual</p>
+                <p className="text-xl md:text-2xl font-bold text-emerald-800">{statusText}</p>
+              </div>
+            </div>
+            
+            {/* Información adicional */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+              <div className="bg-white/50 rounded-xl p-4">
+                <div className="flex items-center justify-center space-x-2">
+                  <Icon name="Clock" className="w-5 h-5 text-emerald-600" />
+                  <div>
+                    <p className="text-xs text-emerald-600 font-medium">Tiempo Estimado</p>
+                    <p className="text-lg font-bold text-emerald-800">{estimatedTime} min</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white/50 rounded-xl p-4">
+                <div className="flex items-center justify-center space-x-2">
+                  <Icon name="MapPin" className="w-5 h-5 text-emerald-600" />
+                  <div>
+                    <p className="text-xs text-emerald-600 font-medium">Ubicación</p>
+                    <p className="text-sm font-bold text-emerald-800">{currentLocation}</p>
+                  </div>
+                </div>
+              </div>
+              
+              {deliveryPerson && (
+                <div className="bg-white/50 rounded-xl p-4">
+                  <div className="flex items-center justify-center space-x-2">
+                    <Icon name="User" className="w-5 h-5 text-emerald-600" />
+                    <div>
+                      <p className="text-xs text-emerald-600 font-medium">Repartidor</p>
+                      <p className="text-sm font-bold text-emerald-800">{deliveryPerson.name}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* Línea de Tiempo */}
-        <div className="bg-white/90 backdrop-blur-sm border border-slate-200/50 rounded-2xl md:rounded-3xl p-6 md:p-8 mb-8 md:mb-10 shadow-lg">
-          <h3 className="text-lg md:text-xl font-semibold text-slate-800 mb-6">Progreso del Pedido</h3>
-          <div className="relative border-l-4 border-slate-200 ml-4">
-            {steps.map((item) => (
-              <div key={item.id} className="mb-8 ml-6">
-                <div className={`absolute w-4 h-4 rounded-full -left-2.5 transform -translate-x-1/2 ${item.id <= step ? 'bg-emerald-500 shadow-lg shadow-emerald-300' : 'bg-slate-300'}`}></div>
-                <div className="flex items-center space-x-3">
+        {/* Timeline Mejorado */}
+        <div className={`bg-white/90 backdrop-blur-sm border border-slate-200/50 rounded-2xl md:rounded-3xl p-6 md:p-8 mb-8 md:mb-10 shadow-lg transition-all duration-700 ${showTimeline ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg md:text-xl font-semibold text-slate-800">Progreso del Pedido</h3>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+              <span className="text-sm text-emerald-600 font-medium">Actualizando...</span>
+            </div>
+          </div>
+          
+          <div className="relative">
+            {/* Línea de progreso */}
+            <div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-emerald-500 via-teal-500 to-emerald-500 rounded-full"></div>
+            
+            {steps.map((item, index) => (
+              <div key={item.id} className={`relative flex items-start mb-8 transition-all duration-500 ${item.completed ? 'opacity-100' : 'opacity-60'}`}>
+                {/* Indicador circular */}
+                <div className={`relative z-10 w-16 h-16 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
+                  item.completed 
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-600' 
+                    : item.active 
+                    ? 'bg-gradient-to-r from-emerald-400 to-teal-500 animate-pulse' 
+                    : 'bg-slate-300'
+                }`}>
                   <Icon 
                     name={item.icon} 
-                    className={`w-5 h-5 md:w-6 md:h-6 ${item.id <= step ? 'text-emerald-600' : 'text-slate-400'}`} 
+                    className={`w-7 h-7 ${item.completed || item.active ? 'text-white' : 'text-slate-500'}`} 
                   />
-                  <div>
-                    <h3 className={`font-bold text-lg md:text-xl ${item.id <= step ? 'text-emerald-700' : 'text-slate-400'}`}>
+                  {/* Efecto de brillo para pasos activos */}
+                  {item.active && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full opacity-75 animate-ping"></div>
+                  )}
+                </div>
+                
+                {/* Contenido del paso */}
+                <div className="ml-6 flex-1">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className={`font-bold text-lg md:text-xl transition-colors duration-300 ${
+                      item.completed || item.active ? 'text-emerald-700' : 'text-slate-400'
+                    }`}>
                       {item.title}
                     </h3>
-                    <p className="text-sm md:text-base text-slate-500">{item.subtitle}</p>
+                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+                      item.completed 
+                        ? 'bg-emerald-100 text-emerald-700' 
+                        : item.active 
+                        ? 'bg-emerald-200 text-emerald-800' 
+                        : 'bg-slate-100 text-slate-500'
+                    }`}>
+                      {item.time}
+                    </span>
                   </div>
+                  <p className="text-sm md:text-base text-slate-500 mb-2">{item.subtitle}</p>
+                  
+                  {/* Información adicional para pasos específicos */}
+                  {item.id === 2 && item.active && (
+                    <div className="bg-emerald-50 rounded-lg p-3 mt-3">
+                      <p className="text-xs text-emerald-700 font-medium">Chef asignado: María González</p>
+                      <p className="text-xs text-emerald-600">Especialidad: Comida saludable</p>
+                    </div>
+                  )}
+                  
+                  {item.id === 3 && item.active && deliveryPerson && (
+                    <div className="bg-emerald-50 rounded-lg p-3 mt-3">
+                      <p className="text-xs text-emerald-700 font-medium">Repartidor: {deliveryPerson.name}</p>
+                      <p className="text-xs text-emerald-600">Vehículo: {deliveryPerson.vehicle}</p>
+                      <p className="text-xs text-emerald-600">Calificación: ⭐ {deliveryPerson.rating}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="space-y-4 md:space-y-6">
+        {/* Action Buttons Mejorados */}
+        <div className={`space-y-4 md:space-y-6 transition-all duration-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           {step < 3 && (
             <button
               onClick={() => setShowCancelModal(true)}

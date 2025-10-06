@@ -1,28 +1,76 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Icon from '../components/Icon';
 
-// Componente profesional de la pantalla de inicio
+// Componente profesional de la pantalla de inicio mejorado
 const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
+  const [showAnimation, setShowAnimation] = useState(false);
+  const [showContent, setShowContent] = useState(false);
+  const [showStats, setShowStats] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const total = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
   const totalFormatted = total.toFixed(2);
   const isCartEmpty = cartCount === 0;
 
+  useEffect(() => {
+    // Animaciones de entrada
+    const timer1 = setTimeout(() => setShowAnimation(true), 100);
+    const timer2 = setTimeout(() => setShowContent(true), 600);
+    const timer3 = setTimeout(() => setShowStats(true), 1000);
+    
+    // Actualizar hora cada minuto
+    const timeInterval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+    
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+      clearInterval(timeInterval);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 relative overflow-hidden pb-20 flex flex-col">
-      {/* Fondo responsive */}
+      {/* Fondo animado mejorado */}
       <div className="absolute inset-0">
-        {/* Elementos decorativos responsive */}
-        <div className="absolute top-20 left-4 md:top-32 md:left-8 w-32 h-32 md:w-48 md:h-48 bg-gradient-to-br from-emerald-200/15 to-teal-200/15 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-40 right-4 md:bottom-48 md:right-8 w-24 h-24 md:w-36 md:h-36 bg-gradient-to-br from-lime-200/15 to-yellow-200/15 rounded-full blur-xl"></div>
-        <div className="hidden lg:block absolute top-1/3 right-1/4 w-32 h-32 bg-gradient-to-br from-green-200/10 to-emerald-200/10 rounded-full blur-xl"></div>
+        {/* Elementos decorativos animados */}
+        <div className="absolute top-20 left-4 md:top-32 md:left-8 w-32 h-32 md:w-48 md:h-48 bg-gradient-to-br from-emerald-200/15 to-teal-200/15 rounded-full blur-2xl animate-pulse"></div>
+        <div className="absolute bottom-40 right-4 md:bottom-48 md:right-8 w-24 h-24 md:w-36 md:h-36 bg-gradient-to-br from-lime-200/15 to-yellow-200/15 rounded-full blur-xl animate-bounce"></div>
+        <div className="hidden lg:block absolute top-1/3 right-1/4 w-32 h-32 bg-gradient-to-br from-green-200/10 to-emerald-200/10 rounded-full blur-xl animate-ping"></div>
+        
+        {/* Partículas flotantes */}
+        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-emerald-400 rounded-full animate-ping opacity-60" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-1/3 right-1/3 w-1.5 h-1.5 bg-teal-400 rounded-full animate-ping opacity-60" style={{animationDelay: '2s'}}></div>
+        <div className="absolute bottom-1/3 left-1/3 w-2 h-2 bg-green-400 rounded-full animate-ping opacity-60" style={{animationDelay: '3s'}}></div>
       </div>
 
       <div className="relative z-10 px-4 sm:px-6 md:px-8 lg:px-12 pt-6 md:pt-8 lg:pt-12 flex-1 flex flex-col justify-center max-w-7xl mx-auto w-full">
+        {/* Header con información de tiempo */}
+        <div className={`mb-8 transition-all duration-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center">
+                <Icon name="Home" className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-slate-800">Bienvenido</h2>
+                <p className="text-sm text-slate-500">{currentTime.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+              <span className="text-xs text-emerald-600 font-medium">En línea</span>
+            </div>
+          </div>
+        </div>
+
         {/* Contenido principal con distribución vertical optimizada */}
-        <div className="flex flex-col justify-center space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 min-h-0 flex-1 py-4 sm:py-6 md:py-8">
-          {/* Texto curvado profesional - NO TÁCTIL */}
-          <div className="relative pointer-events-none text-center">
+        <div className="flex flex-col justify-center space-y-6 sm:space-y-8 md:space-y-10 lg:space-y-12 min-h-0 flex-1 py-4 sm:py-6 md:py-8">
+          {/* Texto curvado profesional animado */}
+          <div className={`relative pointer-events-none text-center transition-all duration-700 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             <div className="text-slate-400 text-sm sm:text-base md:text-lg lg:text-xl font-light tracking-[0.3em] uppercase" style={{
               fontFamily: 'Inter, sans-serif',
               transform: 'perspective(120px) rotateX(15deg)',
@@ -34,29 +82,15 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
             </div>
           </div>
 
-          {/* Título principal profesional */}
-          <div className="space-y-2 md:space-y-3">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-slate-800 tracking-tight leading-tight" style={{
-              fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-              fontWeight: '900',
-              letterSpacing: '-0.03em',
-              textShadow: '0 4px 8px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08)',
-              background: 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}>
-              Inicio
-            </h1>
-            <div className="flex items-center justify-center space-x-2">
-              <div className="w-8 h-px bg-gradient-to-r from-emerald-500 to-teal-500"></div>
-              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" style={{animationDuration: '2s'}}></div>
-              <div className="w-8 h-px bg-gradient-to-r from-teal-500 to-emerald-500"></div>
-            </div>
-            <p className="text-slate-500 text-sm sm:text-base md:text-lg font-medium px-4 md:px-8 lg:px-12 max-w-2xl mx-auto leading-relaxed">
-              Bienvenido a tu experiencia culinaria saludable
-            </p>
+          {/* Separador decorativo */}
+          <div className={`flex items-center justify-center space-x-2 transition-all duration-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            <div className="w-8 h-px bg-gradient-to-r from-emerald-500 to-teal-500"></div>
+            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" style={{animationDuration: '2s'}}></div>
+            <div className="w-8 h-px bg-gradient-to-r from-teal-500 to-emerald-500"></div>
           </div>
+          <p className={`text-slate-500 text-sm sm:text-base md:text-lg font-medium px-4 md:px-8 lg:px-12 max-w-2xl mx-auto leading-relaxed text-center transition-all duration-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            Bienvenido a tu experiencia culinaria saludable
+          </p>
 
         {/* Hero Section responsive */}
         <div className="flex flex-col items-center space-y-4 md:space-y-6 lg:space-y-8">
