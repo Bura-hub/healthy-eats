@@ -20,7 +20,7 @@ const CheckoutScreen = ({ setView, cart, address, setCart, setOrderId }) => {
   // SIMULACIÓN DE PROCESAMIENTO DE PAGO
   const simulateOrderPlacement = () => {
     if (!address.line1) {
-      setError('Dirección inválida. Por favor, verifica la pantalla de Entrega.');
+      setError('Dirección requerida. Por favor, configura tu dirección de entrega.');
       return;
     }
 
@@ -40,7 +40,7 @@ const CheckoutScreen = ({ setView, cart, address, setCart, setOrderId }) => {
       // Éxito: Guardar datos simulados y navegar a confirmación
       const newOrderId = 'ORD-' + Math.floor(Math.random() * 900000 + 100000);
       setOrderId(newOrderId);
-      setCart([]); // Vaciar carrito después del pedido
+      // No vaciar el carrito aquí - se vaciará después de mostrar la confirmación
       setView('confirmation');
 
     }, 2000);

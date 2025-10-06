@@ -21,6 +21,7 @@ const App = () => {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
+  const [fromCheckout, setFromCheckout] = useState(false);
 
   // Efecto para controlar el snackbar
   useEffect(() => {
@@ -59,24 +60,37 @@ const App = () => {
     }, 1000);
   };
 
+  // Función personalizada para navegación que detecta si viene desde checkout
+  const navigateToView = (newView) => {
+    if (newView === 'delivery' && view === 'checkout') {
+      setFromCheckout(true);
+    } else if (newView !== 'delivery') {
+      setFromCheckout(false);
+    }
+    setView(newView);
+    
+    // Scroll hacia arriba cuando cambie la vista
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   // Función para renderizar la vista actual
   const renderView = () => {
     switch (view) {
       case 'menus':
-        return <MenusScreen setView={setView} cart={cart} setCart={setCart} setShowSnackbar={setShowSnackbar} />;
+        return <MenusScreen setView={navigateToView} cart={cart} setCart={setCart} setShowSnackbar={setShowSnackbar} />;
       case 'cart':
-        return <CartScreen setView={setView} cart={cart} setCart={setCart} address={address} />;
+        return <CartScreen setView={navigateToView} cart={cart} setCart={setCart} address={address} />;
       case 'delivery':
-        return <DeliveryScreen setView={setView} setAddress={setAddress} />;
+        return <DeliveryScreen setView={navigateToView} setAddress={setAddress} cart={cart} fromCheckout={fromCheckout} />;
       case 'checkout':
-        return <CheckoutScreen setView={setView} cart={cart} address={address} setCart={setCart} setOrderId={setOrderId} />;
+        return <CheckoutScreen setView={navigateToView} cart={cart} address={address} setCart={setCart} setOrderId={setOrderId} />;
       case 'confirmation':
-        return <ConfirmationScreen setView={setView} orderId={orderId} address={address} />;
+        return <ConfirmationScreen setView={navigateToView} orderId={orderId} cart={cart} address={address} setCart={setCart} />;
       case 'tracking':
-        return <TrackingScreen setView={setView} orderId={orderId} setOrderId={setOrderId} />;
+        return <TrackingScreen setView={navigateToView} orderId={orderId} setOrderId={setOrderId} />;
       case 'home':
       default:
-        return <HomeScreen setView={setView} cart={cart} address={address} setShowContactModal={setShowContactModal} />;
+        return <HomeScreen setView={navigateToView} cart={cart} address={address} setShowContactModal={setShowContactModal} />;
     }
   };
 
@@ -92,7 +106,7 @@ const App = () => {
         
         <NavBar 
           view={view} 
-          setView={setView} 
+          setView={navigateToView} 
           cart={cart} 
           setShowContactModal={setShowContactModal} 
         />
@@ -104,7 +118,7 @@ const App = () => {
               <Icon name="CheckCircle" className="w-5 h-5 text-primary-400" />
               <span>Añadido al carrito (Simulado).</span>
               <button 
-                onClick={() => setView('cart')} 
+                onClick={() => navigateToView('cart')} 
                 className="underline text-primary-300 font-medium text-sm ml-2"
               >
                 Ir al Carrito

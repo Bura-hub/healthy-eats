@@ -3,7 +3,7 @@ import { SAVED_ADDRESSES } from '../data/mockData';
 import Icon from '../components/Icon';
 
 // Componente: Lugar de Entrega con diseño profesional mejorado
-const DeliveryScreen = ({ setView, setAddress }) => {
+const DeliveryScreen = ({ setView, setAddress, cart, fromCheckout = false }) => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [showMap, setShowMap] = useState(false);
@@ -39,7 +39,14 @@ const DeliveryScreen = ({ setView, setAddress }) => {
       setMessage('✅ Dirección establecida para la entrega');
       setTimeout(() => {
         setIsLoading(false);
-        setView('home');
+        // Si viene desde checkout, regresar a checkout
+        if (fromCheckout) {
+          setView('checkout');
+        } else {
+          // Redirigir al carrito si hay items, o a menús si está vacío
+          const hasItems = cart && cart.length > 0;
+          setView(hasItems ? 'cart' : 'menus');
+        }
       }, 1500);
     }
   };
@@ -85,7 +92,14 @@ const DeliveryScreen = ({ setView, setAddress }) => {
       setMessage('✅ Dirección guardada y establecida');
       setTimeout(() => {
         setIsLoading(false);
-        setView('home');
+        // Si viene desde checkout, regresar a checkout
+        if (fromCheckout) {
+          setView('checkout');
+        } else {
+          // Redirigir al carrito si hay items, o a menús si está vacío
+          const hasItems = cart && cart.length > 0;
+          setView(hasItems ? 'cart' : 'menus');
+        }
       }, 1500);
     } else {
       setMessage('⚠️ Por favor completa todos los campos');
@@ -105,7 +119,14 @@ const DeliveryScreen = ({ setView, setAddress }) => {
       setMessage('✅ Dirección establecida como predeterminada');
       setTimeout(() => {
         setIsLoading(false);
-        setView('home');
+        // Si viene desde checkout, regresar a checkout
+        if (fromCheckout) {
+          setView('checkout');
+        } else {
+          // Redirigir al carrito si hay items, o a menús si está vacío
+          const hasItems = cart && cart.length > 0;
+          setView(hasItems ? 'cart' : 'menus');
+        }
       }, 1500);
     } else {
       setMessage('⚠️ Por favor completa todos los campos');
