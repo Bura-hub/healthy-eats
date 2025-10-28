@@ -9,6 +9,7 @@ import DeliveryScreen from './pages/DeliveryScreen';
 import CheckoutScreen from './pages/CheckoutScreen';
 import ConfirmationScreen from './pages/ConfirmationScreen';
 import TrackingScreen from './pages/TrackingScreen';
+import OrdersScreen from './pages/OrdersScreen';
 import ContactModal from './components/ContactModal';
 
 // Componente principal de la aplicación
@@ -19,6 +20,7 @@ const App = () => {
   const [address, setAddress] = useState({ line1: '', city: '', postalCode: '' });
   const [orderId, setOrderId] = useState(null);
   const [deliveryTime, setDeliveryTime] = useState(null);
+  const [orders, setOrders] = useState([]);
   const [snackbar, setSnackbar] = useState({ show: false, message: '', action: null });
   const [showContactModal, setShowContactModal] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
@@ -89,11 +91,13 @@ const App = () => {
       case 'delivery':
         return <DeliveryScreen setView={navigateToView} setAddress={setAddress} cart={cart} fromCheckout={fromCheckout} showSnackbar={showSnackbarMessage} />;
       case 'checkout':
-        return <CheckoutScreen setView={navigateToView} cart={cart} address={address} setOrderId={setOrderId} setDeliveryTime={setDeliveryTime} />;
+        return <CheckoutScreen setView={navigateToView} cart={cart} address={address} setOrderId={setOrderId} setDeliveryTime={setDeliveryTime} setOrders={setOrders} />;
       case 'confirmation':
-        return <ConfirmationScreen setView={navigateToView} orderId={orderId} cart={cart} address={address} setCart={setCart} deliveryTime={deliveryTime} />;
+        return <ConfirmationScreen setView={navigateToView} orderId={orderId} cart={cart} address={address} setCart={setCart} deliveryTime={deliveryTime} orders={orders} setOrders={setOrders} />;
       case 'tracking':
-        return <TrackingScreen setView={navigateToView} orderId={orderId} setOrderId={setOrderId} />;
+        return <TrackingScreen setView={navigateToView} orderId={orderId} setOrderId={setOrderId} orders={orders} deliveryTime={deliveryTime} />;
+      case 'orders':
+        return <OrdersScreen setView={navigateToView} orders={orders} setOrderId={setOrderId} />;
       case 'home':
       default:
         return <HomeScreen setView={navigateToView} cart={cart} address={address} setShowContactModal={setShowContactModal} />;

@@ -4,17 +4,32 @@ import CancelOrderModal from '../components/CancelOrderModal';
 import CancelConfirmationScreen from '../components/CancelConfirmationScreen';
 
 // Componente: Seguimiento de Pedido Profesional Avanzado
-const TrackingScreen = ({ setView, orderId, setOrderId }) => {
-  const [step, setStep] = useState(1); // 1: Preparando, 2: En Camino, 3: Entregado
+const TrackingScreen = ({ setView, orderId, setOrderId, orders = [], deliveryTime }) => {
+  // Buscar el pedido actual en la lista de pedidos
+  const currentOrder = orders.find(order => order.id === orderId);
+  
+  const [step, setStep] = useState(1); // 1: Preparando, 2: Listo, 3: Recogido
   const [statusText, setStatusText] = useState('Recibido y Confirmado');
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
   const [showAnimation, setShowAnimation] = useState(false);
   const [showContent, setShowContent] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
-  const [estimatedTime, setEstimatedTime] = useState(25);
-  const [deliveryPerson, setDeliveryPerson] = useState(null);
+  const [estimatedTime, setEstimatedTime] = useState(0);
   const [currentLocation, setCurrentLocation] = useState('Cocina Healthy Eats');
+
+  // Calcular tiempo hasta recogida basado en deliveryTime o currentOrder
+  const getTimeUntilPickup = () => {
+    const pickupTime = currentOrder?.pickupTime || deliveryTime;
+    if (!pickupTime) return 0;
+    
+    const now = new Date();
+    const pickup = new Date(pickupTime);
+    const diffMs = pickup - now;
+    const diffMins = Math.round(diffMs / 60000);
+    
+    return diffMins > 0 ? diffMins : 0;
+  };
 
   useEffect(() => {
     // Animaciones de entrada
@@ -30,32 +45,46 @@ const TrackingScreen = ({ setView, orderId, setOrderId }) => {
   }, []);
 
   useEffect(() => {
-    // Simulación de pasos de seguimiento con temporizador
-    let timer;
-    if (step < 3) {
-      timer = setTimeout(() => {
-        setStep(step + 1);
-      }, 8000); // Avanza cada 8 segundos para mejor experiencia
+    // Actualizar estimatedTime basado en el pedido real
+    const timeUntilPickup = getTimeUntilPickup();
+    setEstimatedTime(timeUntilPickup);
 
-      if (step === 1) {
-        setStatusText('Preparando el menú saludable...');
-        setEstimatedTime(20);
-        setCurrentLocation('Cocina Healthy Eats');
+    // Actualizar cada minuto
+    const interval = setInterval(() => {
+      const updatedTime = getTimeUntilPickup();
+      setEstimatedTime(updatedTime);
+      
+      // Actualizar el paso basado en el estado del pedido o el tiempo
+      if (currentOrder) {
+        if (currentOrder.status === 'listo') {
+          setStep(2);
+          setStatusText('¡Listo para recoger!');
+          setCurrentLocation('Listo en el restaurante');
+        } else if (currentOrder.status === 'completado') {
+          setStep(3);
+          setStatusText('¡Recogido! Gracias por tu pedido.');
+          setCurrentLocation('Recogido');
+        } else {
+          setStep(1);
+          setStatusText('Preparando tu menú saludable...');
+          setCurrentLocation('En preparación');
+        }
+      } else {
+        // Si no hay pedido en la lista, usar lógica de tiempo
+        if (updatedTime === 0) {
+          setStep(2);
+          setStatusText('¡Listo para recoger!');
+          setCurrentLocation('Listo en el restaurante');
+        } else {
+          setStep(1);
+          setStatusText('Preparando tu menú saludable...');
+          setCurrentLocation('En preparación');
+        }
       }
-      if (step === 2) {
-        setStatusText('¡En camino! El repartidor ya salió.');
-        setEstimatedTime(15);
-        setCurrentLocation('En ruta hacia tu ubicación');
-        setDeliveryPerson({ name: 'Carlos M.', rating: 4.9, vehicle: 'Moto Verde' });
-      }
-    } else if (step === 3) {
-       setStatusText('¡Entregado! Gracias por tu pedido.');
-       setEstimatedTime(0);
-       setCurrentLocation('Entregado en tu ubicación');
-    }
+    }, 60000); // Actualizar cada minuto
 
-    return () => clearTimeout(timer);
-  }, [step]);
+    return () => clearInterval(interval);
+  }, [currentOrder, deliveryTime]);
 
   const handleCancelOrder = () => {
     // Mostrar pantalla de confirmación de cancelación
@@ -75,42 +104,33 @@ const TrackingScreen = ({ setView, orderId, setOrderId }) => {
   const steps = [
     { 
       id: 1, 
-      title: 'Pedido Recibido', 
-      subtitle: 'Confirmado por la cocina.', 
+      title: 'Pedido Confirmado', 
+      subtitle: 'Confirmado por el restaurante.', 
       icon: 'CheckCircle',
-      time: 'Hace 5 min',
+      time: 'Confirmado',
       color: 'emerald',
-      completed: step >= 1
+      completed: step >= 1,
+      active: step === 1
     },
     { 
       id: 2, 
       title: 'En Preparación', 
-      subtitle: 'Tu menú se está cocinando.', 
+      subtitle: 'Tu menú se está preparando.', 
       icon: 'Clock',
-      time: 'En progreso',
-      color: step === 2 ? 'emerald' : 'gray',
+      time: estimatedTime > 0 ? `${estimatedTime} min` : 'En progreso',
+      color: step >= 1 ? 'emerald' : 'gray',
       completed: step >= 2,
-      active: step === 2
+      active: step === 1 && step < 2
     },
     { 
       id: 3, 
-      title: 'En Camino', 
-      subtitle: 'Saliendo para la entrega.', 
-      icon: 'Truck',
-      time: step >= 3 ? 'Hace 2 min' : 'Próximo',
-      color: step >= 3 ? 'emerald' : 'gray',
-      completed: step >= 3,
-      active: step === 3
-    },
-    { 
-      id: 4, 
-      title: 'Entregado', 
-      subtitle: '¡Disfruta tu Healthy Eats!', 
-      icon: 'Check',
-      time: step >= 4 ? 'Completado' : 'Próximo',
-      color: step >= 4 ? 'emerald' : 'gray',
-      completed: step >= 4,
-      active: step === 4
+      title: 'Listo para Recoger', 
+      subtitle: 'Tu pedido está listo en el restaurante.', 
+      icon: 'Utensils',
+      time: step >= 2 ? 'Listo' : 'Próximo',
+      color: step >= 2 ? 'emerald' : 'gray',
+      completed: step >= 2,
+      active: step === 2
     },
   ];
 
@@ -207,18 +227,6 @@ const TrackingScreen = ({ setView, orderId, setOrderId }) => {
                   </div>
                 </div>
               </div>
-              
-              {deliveryPerson && (
-                <div className="bg-white/50 rounded-xl p-4">
-                  <div className="flex items-center justify-center space-x-2">
-                    <Icon name="User" className="w-5 h-5 text-emerald-600" />
-                    <div>
-                      <p className="text-xs text-emerald-600 font-medium">Repartidor</p>
-                      <p className="text-sm font-bold text-emerald-800">{deliveryPerson.name}</p>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -282,14 +290,6 @@ const TrackingScreen = ({ setView, orderId, setOrderId }) => {
                     <div className="bg-emerald-50 rounded-lg p-3 mt-3">
                       <p className="text-xs text-emerald-700 font-medium">Chef asignado: María González</p>
                       <p className="text-xs text-emerald-600">Especialidad: Comida saludable</p>
-                    </div>
-                  )}
-                  
-                  {item.id === 3 && item.active && deliveryPerson && (
-                    <div className="bg-emerald-50 rounded-lg p-3 mt-3">
-                      <p className="text-xs text-emerald-700 font-medium">Repartidor: {deliveryPerson.name}</p>
-                      <p className="text-xs text-emerald-600">Vehículo: {deliveryPerson.vehicle}</p>
-                      <p className="text-xs text-emerald-600">Calificación: ⭐ {deliveryPerson.rating}</p>
                     </div>
                   )}
                 </div>

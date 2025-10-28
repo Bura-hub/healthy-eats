@@ -171,7 +171,7 @@ export const MENU_DATA = [
   },
 ];
 
-// Direcciones predeterminadas
+// Direcciones predeterminadas (restaurantes para recogida)
 export const SAVED_ADDRESSES = [
   { 
     id: 1,
@@ -180,7 +180,7 @@ export const SAVED_ADDRESSES = [
     city: '',
     postalCode: '',
     isDefault: true,
-    deliveryTime: '30-45 min',
+    deliveryTime: 'Mínimo 45 min',
     icon: 'Utensils'
   },
   { 
@@ -190,7 +190,7 @@ export const SAVED_ADDRESSES = [
     city: '',
     postalCode: '',
     isDefault: false,
-    deliveryTime: '25-35 min',
+    deliveryTime: 'Mínimo 45 min',
     icon: 'Utensils'
   },
   { 
@@ -200,7 +200,7 @@ export const SAVED_ADDRESSES = [
     city: '',
     postalCode: '',
     isDefault: false,
-    deliveryTime: '40-55 min',
+    deliveryTime: 'Mínimo 45 min',
     icon: 'Utensils'
   },
   { 
@@ -210,7 +210,7 @@ export const SAVED_ADDRESSES = [
     city: '',
     postalCode: '',
     isDefault: false,
-    deliveryTime: '35-50 min',
+    deliveryTime: 'Mínimo 45 min',
     icon: 'Utensils'
   },
 ];

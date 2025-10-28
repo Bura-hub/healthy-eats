@@ -24,10 +24,10 @@ const NavBar = ({ view, setView, cart, setShowContactModal }) => {
       description: 'Revisar pedido'
     },
     { 
-      name: 'Entrega', 
-      target: 'delivery', 
-      icon: 'MapPin',
-      description: 'Configurar dirección'
+      name: 'Pedidos', 
+      target: 'orders', 
+      icon: 'ClipboardList',
+      description: 'Seguimiento de pedidos'
     },
   ];
 

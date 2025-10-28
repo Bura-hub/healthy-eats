@@ -4,7 +4,7 @@ import { generateTimeSlots, formatDeliveryTime, isValidDeliveryTime } from '../u
 import Icon from '../components/Icon';
 
 // Componente: Checkout / Pago y Confirmación - Diseño Profesional
-const CheckoutScreen = ({ setView, cart, address, setOrderId, setDeliveryTime }) => {
+const CheckoutScreen = ({ setView, cart, address, setOrderId, setDeliveryTime, setOrders }) => {
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -62,6 +62,32 @@ const CheckoutScreen = ({ setView, cart, address, setOrderId, setDeliveryTime })
       if (setDeliveryTime) {
         setDeliveryTime(selectedDeliveryTime);
       }
+      
+      // Crear el nuevo pedido
+      if (setOrders) {
+        const newOrder = {
+          id: newOrderId,
+          date: new Date().toLocaleDateString('es-ES', { 
+            day: '2-digit', 
+            month: 'short', 
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          }),
+          restaurant: address.line1,
+          pickupTime: selectedDeliveryTime,
+          items: cart.map(item => ({
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price
+          })),
+          total: calculateTotals.total,
+          status: 'preparando' // Estados: preparando, listo, completado, cancelado
+        };
+        
+        setOrders(prevOrders => [...prevOrders, newOrder]);
+      }
+      
       // No vaciar el carrito aquí - se vaciará después de mostrar la confirmación
       setView('confirmation');
 
@@ -521,7 +547,12 @@ const CheckoutScreen = ({ setView, cart, address, setOrderId, setDeliveryTime })
                     fontWeight: '400'
                   }}>
                     <Icon name="Clock" className="w-4 h-4 mr-2 text-emerald-500" />
-                    <span>Listo para recoger: 15-20 min</span>
+                    <span>
+                      {selectedDeliveryTime 
+                        ? `Listo para recoger: ${formatDeliveryTime(selectedDeliveryTime)}`
+                        : 'Selecciona tu hora de recogida'
+                      }
+                    </span>
                   </div>
                 </div>
               </div>

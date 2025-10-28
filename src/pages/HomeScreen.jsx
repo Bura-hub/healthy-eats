@@ -263,7 +263,7 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
             <div className="flex items-center justify-center space-x-3 md:space-x-6 lg:space-x-8 text-xs md:text-sm lg:text-base text-slate-500">
               <div className="flex items-center space-x-1 md:space-x-2">
                 <Icon name="Clock" className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5" />
-                <span>30-45 min</span>
+                <span>Mínimo 45 min</span>
               </div>
               <div className="flex items-center space-x-1 md:space-x-2">
                 <Icon name="Utensils" className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5" />

@@ -209,11 +209,11 @@ const DeliveryScreen = ({ setView, setAddress, cart, fromCheckout = false, showS
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-slate-200/50 shadow-lg hover:shadow-xl transition-all duration-300">
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-emerald-100 rounded-xl animate-pulse-subtle">
-                <Icon name="Bike" className="w-5 h-5 text-emerald-600" />
+                <Icon name="Clock" className="w-5 h-5 text-emerald-600" />
               </div>
               <div className="flex-1">
-                <span className="text-sm text-slate-600 font-medium">Tiempo Estimado en tu Zona:</span>
-                <span className="ml-2 font-bold text-slate-800 text-lg">30-45 min</span>
+                <span className="text-sm text-slate-600 font-medium">Tiempo de preparación:</span>
+                <span className="ml-2 font-bold text-slate-800 text-lg">Mínimo 45 min</span>
               </div>
             </div>
           </div>

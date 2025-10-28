@@ -451,7 +451,7 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
               fontFamily: 'Inter, sans-serif',
               fontWeight: '600'
             }}>
-              Tiempo estimado de entrega: 30-45 min
+              Listo para recoger: mínimo 45 min después de confirmar
             </p>
           </div>
         </div>

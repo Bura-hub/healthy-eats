@@ -4,7 +4,7 @@ import { formatDeliveryTime } from '../utils/timeHelpers';
 import Icon from '../components/Icon';
 
 // Componente: Confirmación de Pedido - Diseño Profesional Mejorado
-const ConfirmationScreen = ({ setView, orderId, cart, address, deliveryTime }) => {
+const ConfirmationScreen = ({ setView, orderId, cart, address, deliveryTime, orders, setOrders }) => {
   const [showAnimation, setShowAnimation] = useState(false);
   const [showContent, setShowContent] = useState(false);
   const [showOrderDetails, setShowOrderDetails] = useState(false);
@@ -28,6 +28,24 @@ const ConfirmationScreen = ({ setView, orderId, cart, address, deliveryTime }) =
     };
   }, []);
 
+  // Simular actualización del estado del pedido
+  useEffect(() => {
+    if (!orderId || !setOrders) return;
+    
+    // Simular que el pedido pasa a "listo" después de 30 segundos (para demo)
+    const listoTimer = setTimeout(() => {
+      setOrders(prevOrders => 
+        prevOrders.map(order => 
+          order.id === orderId 
+            ? { ...order, status: 'listo' }
+            : order
+        )
+      );
+    }, 30000); // 30 segundos
+    
+    return () => clearTimeout(listoTimer);
+  }, [orderId, setOrders]);
+
   // Calculate order summary with detailed breakdown
   const orderSummary = cart.reduce((acc, item) => {
     acc.subtotal += item.price * item.quantity;
@@ -43,9 +61,29 @@ const ConfirmationScreen = ({ setView, orderId, cart, address, deliveryTime }) =
 
   const total = orderSummary.subtotal; // pickup mode: sin envío ni impuestos
 
-  // Generate estimated delivery time
-  const estimatedTime = new Date();
-  estimatedTime.setMinutes(estimatedTime.getMinutes() + 45);
+  // Calcular tiempo hasta la recogida
+  const getTimeUntilPickup = () => {
+    if (!deliveryTime) return '15-20 minutos';
+    
+    const now = new Date();
+    const pickup = new Date(deliveryTime);
+    const diffMs = pickup - now;
+    const diffMins = Math.round(diffMs / 60000);
+    
+    if (diffMins < 0) {
+      return 'unos momentos';
+    } else if (diffMins <= 5) {
+      return '5 minutos';
+    } else if (diffMins <= 20 && diffMins >= 15) {
+      return '15-20 minutos';
+    } else if (diffMins < 60) {
+      return `${diffMins} minutos`;
+    } else {
+      const hours = Math.floor(diffMins / 60);
+      const mins = diffMins % 60;
+      return mins > 0 ? `${hours} hora${hours > 1 ? 's' : ''} y ${mins} minutos` : `${hours} hora${hours > 1 ? 's' : ''}`;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 relative overflow-hidden pb-20 flex flex-col animate-fade-in">
@@ -236,7 +274,7 @@ const ConfirmationScreen = ({ setView, orderId, cart, address, deliveryTime }) =
                 <p className="text-sm md:text-base text-emerald-700 font-medium leading-relaxed">
                   {deliveryTime 
                     ? `Tu pedido estará listo para recoger ${formatDeliveryTime(deliveryTime)}. Menciona tu ID al llegar.`
-                    : 'Tu pedido estará listo para recoger en 15-20 minutos. Menciona tu ID al llegar.'
+                    : `Tu pedido estará listo para recoger en ${getTimeUntilPickup()}. Menciona tu ID al llegar.`
                   }
                 </p>
               </div>
@@ -255,7 +293,7 @@ const ConfirmationScreen = ({ setView, orderId, cart, address, deliveryTime }) =
             <div className="space-y-3 text-sm text-slate-600">
               <div className="flex items-center"><Icon name="CheckCircle" className="w-5 h-5 text-emerald-600 mr-2" /> Pedido confirmado</div>
               <div className="flex items-center"><Icon name="Clock" className="w-5 h-5 text-emerald-600 mr-2" /> Preparando tu pedido</div>
-              <div className="flex items-center"><Icon name="Utensils" className="w-5 h-5 text-emerald-600 mr-2" /> Listo para recoger en 15-20 min</div>
+              <div className="flex items-center"><Icon name="Utensils" className="w-5 h-5 text-emerald-600 mr-2" /> Listo para recoger en {getTimeUntilPickup()}</div>
             </div>
           </div>
 
