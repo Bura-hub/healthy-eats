@@ -1,26 +1,45 @@
 import React, { useState, useMemo } from 'react';
+import { formatCOPFromUSD } from '../utils/currency';
+import { generateTimeSlots, formatDeliveryTime, isValidDeliveryTime } from '../utils/timeHelpers';
 import Icon from '../components/Icon';
 
 // Componente: Checkout / Pago y Confirmación - Diseño Profesional
-const CheckoutScreen = ({ setView, cart, address, setCart, setOrderId }) => {
+const CheckoutScreen = ({ setView, cart, address, setOrderId, setDeliveryTime }) => {
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showOrderSummary, setShowOrderSummary] = useState(false);
   const [cardDigits, setCardDigits] = useState('4242');
+  const [selectedDeliveryTime, setSelectedDeliveryTime] = useState('');
+  
+  // Generar slots de tiempo disponibles (se recalcula dinámicamente)
+  const timeSlots = useMemo(() => {
+    // Forzar recálculo incluyendo timestamp para que sea reactivo
+    return generateTimeSlots(12);
+  }, []); // Mantenemos [] pero la función genera nuevas fechas cada vez
 
   const calculateTotals = useMemo(() => {
     const subtotal = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
-    const deliveryFee = subtotal > 0 ? 1.50 : 0.00;
+    const deliveryFee = 0.00; // sin envío en modo recogida
     const discount = subtotal > 0 ? 0.20 : 0.00;
-    const total = subtotal + deliveryFee - discount;
+    const total = subtotal - discount; // envío 0
     return { subtotal, deliveryFee, discount, total };
   }, [cart]);
 
   // SIMULACIÓN DE PROCESAMIENTO DE PAGO
   const simulateOrderPlacement = () => {
     if (!address.line1) {
-      setError('Dirección requerida. Por favor, configura tu dirección de entrega.');
+      setError('Restaurante requerido. Por favor, selecciona un restaurante.');
+      return;
+    }
+
+    if (!selectedDeliveryTime) {
+      setError('Hora de recogida requerida. Por favor, selecciona cuándo recogerás tu pedido.');
+      return;
+    }
+
+    if (!isValidDeliveryTime(selectedDeliveryTime)) {
+      setError('La hora de recogida debe ser al menos 45 minutos después de ahora.');
       return;
     }
 
@@ -40,6 +59,9 @@ const CheckoutScreen = ({ setView, cart, address, setCart, setOrderId }) => {
       // Éxito: Guardar datos simulados y navegar a confirmación
       const newOrderId = 'ORD-' + Math.floor(Math.random() * 900000 + 100000);
       setOrderId(newOrderId);
+      if (setDeliveryTime) {
+        setDeliveryTime(selectedDeliveryTime);
+      }
       // No vaciar el carrito aquí - se vaciará después de mostrar la confirmación
       setView('confirmation');
 
@@ -167,7 +189,7 @@ const CheckoutScreen = ({ setView, cart, address, setCart, setOrderId }) => {
                       <span className="font-bold text-slate-800" style={{
                         fontFamily: '"SF Pro Display", "Helvetica Neue", "Arial", sans-serif',
                         fontWeight: '600'
-                      }}>${(item.price * item.quantity).toFixed(2)}</span>
+                      }}>{formatCOPFromUSD(item.price * item.quantity)}</span>
                     </div>
                   ))}
                 </div>
@@ -175,11 +197,11 @@ const CheckoutScreen = ({ setView, cart, address, setCart, setOrderId }) => {
             </div>
           </div>
 
-          {/* Sección 2: Dirección */}
+          {/* Sección 2: Restaurante */}
           <div>
             <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center space-x-2">
               <Icon name="MapPin" className="w-5 h-5 text-emerald-600 animate-pulse-subtle" />
-              <span>Dirección</span>
+              <span>Restaurante</span>
             </h2>
             <div className={`bg-white/90 backdrop-blur-sm rounded-2xl border p-4 shadow-lg hover:shadow-xl transition-all duration-300 ${
               !address.line1 ? 'border-amber-200 bg-amber-50/30' : 'border-slate-200'
@@ -200,17 +222,13 @@ const CheckoutScreen = ({ setView, cart, address, setCart, setOrderId }) => {
                           fontFamily: '"SF Pro Display", "Helvetica Neue", "Arial", sans-serif',
                           fontWeight: '600'
                         }}>{address.line1}</p>
-                        <p className="text-sm text-slate-500 font-medium" style={{
-                          fontFamily: '"SF Pro Text", "Helvetica Neue", "Arial", sans-serif',
-                          fontWeight: '400'
-                        }}>{address.city}, C.P. {address.postalCode}</p>
                       </>
                     ) : (
                       <p className="text-slate-600 text-sm font-medium" style={{
                         fontFamily: '"SF Pro Text", "Helvetica Neue", "Arial", sans-serif',
                         fontWeight: '400'
                       }}>
-                        Selecciona una dirección de entrega
+                        Selecciona un restaurante
                       </p>
                     )}
                   </div>
@@ -228,9 +246,78 @@ const CheckoutScreen = ({ setView, cart, address, setCart, setOrderId }) => {
                     fontFamily: '"SF Pro Text", "Helvetica Neue", "Arial", sans-serif',
                     fontWeight: '500'
                   }}>
-                    {!address.line1 ? 'Configurar' : 'Cambiar'}
+                    {!address.line1 ? 'Seleccionar' : 'Cambiar'}
                   </span>
                 </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Sección 2.5: Hora de Recogida */}
+          <div>
+            <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center space-x-2">
+              <Icon name="Clock" className="w-5 h-5 text-emerald-600 animate-pulse-subtle" />
+              <span>Hora de Recogida</span>
+            </h2>
+            <div className={`bg-white/90 backdrop-blur-sm rounded-2xl border p-4 shadow-lg hover:shadow-xl transition-all duration-300 ${
+              !selectedDeliveryTime ? 'border-amber-200 bg-amber-50/30' : 'border-slate-200'
+            }`}>
+              <div className="space-y-3">
+                <div className="flex items-start space-x-3">
+                  <div className={`p-2 rounded-xl mt-1 ${
+                    !selectedDeliveryTime ? 'bg-amber-100' : 'bg-emerald-100'
+                  }`}>
+                    <Icon name="Clock" className={`w-5 h-5 ${
+                      !selectedDeliveryTime ? 'text-amber-600' : 'text-emerald-600'
+                    }`} />
+                  </div>
+                  <div className="flex-1">
+                    <label htmlFor="delivery-time" className="block text-sm font-semibold text-slate-700 mb-2" style={{
+                      fontFamily: '"SF Pro Text", "Helvetica Neue", "Arial", sans-serif',
+                      fontWeight: '600'
+                    }}>
+                      Selecciona cuándo recogerás tu pedido
+                    </label>
+                    <select
+                      id="delivery-time"
+                      value={selectedDeliveryTime}
+                      onChange={(e) => setSelectedDeliveryTime(e.target.value)}
+                      className="w-full px-4 py-3 border-2 border-slate-300 rounded-xl text-base font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 bg-white/80 backdrop-blur-sm"
+                      style={{
+                        fontFamily: '"SF Pro Display", "Helvetica Neue", "Arial", sans-serif',
+                        fontWeight: '500'
+                      }}
+                    >
+                      <option value="">Selecciona una hora...</option>
+                      {timeSlots.map((slot) => (
+                        <option key={slot.value} value={slot.value}>
+                          {slot.label}
+                        </option>
+                      ))}
+                    </select>
+                    <p className="mt-2 text-xs text-slate-500 flex items-center" style={{
+                      fontFamily: '"SF Pro Text", "Helvetica Neue", "Arial", sans-serif',
+                      fontWeight: '400'
+                    }}>
+                      <Icon name="Info" className="w-3 h-3 mr-1" />
+                      Tiempo mínimo de preparación: 45 minutos
+                    </p>
+                  </div>
+                </div>
+                
+                {selectedDeliveryTime && (
+                  <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl animate-slide-down">
+                    <div className="flex items-center space-x-2">
+                      <Icon name="CheckCircle" className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                      <p className="text-sm font-semibold text-emerald-800" style={{
+                        fontFamily: '"SF Pro Text", "Helvetica Neue", "Arial", sans-serif',
+                        fontWeight: '600'
+                      }}>
+                        Recoge tu pedido: {formatDeliveryTime(selectedDeliveryTime)}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -405,18 +492,9 @@ const CheckoutScreen = ({ setView, cart, address, setCart, setOrderId }) => {
                   <span className="font-bold text-slate-800" style={{
                     fontFamily: '"SF Pro Display", "Helvetica Neue", "Arial", sans-serif',
                     fontWeight: '600'
-                  }}>${calculateTotals.subtotal.toFixed(2)}</span>
+                  }}>{formatCOPFromUSD(calculateTotals.subtotal)}</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-600 font-medium" style={{
-                    fontFamily: '"SF Pro Text", "Helvetica Neue", "Arial", sans-serif',
-                    fontWeight: '400'
-                  }}>Envío</span>
-                  <span className="font-bold text-slate-800" style={{
-                    fontFamily: '"SF Pro Display", "Helvetica Neue", "Arial", sans-serif',
-                    fontWeight: '600'
-                  }}>${calculateTotals.deliveryFee.toFixed(2)}</span>
-                </div>
+                {/* Envío eliminado en modo recogida */}
                 <div className="flex justify-between items-center">
                   <span className="text-slate-600 font-medium" style={{
                     fontFamily: '"SF Pro Text", "Helvetica Neue", "Arial", sans-serif',
@@ -425,7 +503,7 @@ const CheckoutScreen = ({ setView, cart, address, setCart, setOrderId }) => {
                   <span className="font-bold text-slate-800" style={{
                     fontFamily: '"SF Pro Display", "Helvetica Neue", "Arial", sans-serif',
                     fontWeight: '600'
-                  }}>-${calculateTotals.discount.toFixed(2)}</span>
+                  }}>-{formatCOPFromUSD(calculateTotals.discount)}</span>
                 </div>
                 <div className="border-t-2 border-slate-200 pt-4">
                   <div className="flex justify-between items-center mb-3">
@@ -436,14 +514,14 @@ const CheckoutScreen = ({ setView, cart, address, setCart, setOrderId }) => {
                     <span className="text-2xl font-black text-emerald-600" style={{
                       fontFamily: '"SF Pro Display", "Helvetica Neue", "Arial", sans-serif',
                       fontWeight: '800'
-                    }}>${calculateTotals.total.toFixed(2)}</span>
+                    }}>{formatCOPFromUSD(calculateTotals.total)}</span>
                   </div>
                   <div className="flex items-center text-sm text-slate-500 font-medium" style={{
                     fontFamily: '"SF Pro Text", "Helvetica Neue", "Arial", sans-serif',
                     fontWeight: '400'
                   }}>
                     <Icon name="Clock" className="w-4 h-4 mr-2 text-emerald-500" />
-                    <span>Entrega estimada: 25-35 min</span>
+                    <span>Listo para recoger: 15-20 min</span>
                   </div>
                 </div>
               </div>

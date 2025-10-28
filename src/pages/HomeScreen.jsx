@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { formatCOPFromUSD } from '../utils/currency';
 import Icon from '../components/Icon';
 import fondoInicio from '../assets/images/fondo_inicio.png';
 
@@ -10,7 +11,7 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
   
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const total = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
-  const totalFormatted = total.toFixed(2);
+  const totalFormatted = formatCOPFromUSD(total);
   const isCartEmpty = cartCount === 0;
 
   useEffect(() => {
@@ -182,7 +183,7 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
             <button 
               onClick={() => setView('delivery')} 
               className="w-full bg-white/90 p-4 md:p-6 lg:p-8 rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] depth-2 border border-slate-200/50 hover:shadow-xl hover:bg-white transition-all duration-200 active:scale-[0.98] hover:border-blue-200/50 min-h-[72px] md:min-h-[80px] lg:min-h-[88px] micro-interaction"
-              aria-label="Configurar dirección de entrega"
+              aria-label="Seleccionar restaurante"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3 md:space-x-4 lg:space-x-6">
@@ -193,9 +194,9 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
                   
                    {/* Contenido responsive */}
                    <div className="text-left">
-                     <h4 className="font-semibold text-slate-800 text-base md:text-lg lg:text-xl mb-1">Lugar de Entrega</h4>
+                     <h4 className="font-semibold text-slate-800 text-base md:text-lg lg:text-xl mb-1">Restaurante</h4>
                      <p className="text-slate-500 text-sm md:text-base lg:text-lg font-medium leading-relaxed">
-                       {address.line1 || "Configura tu dirección"}
+                       {address.line1 || "Selecciona un restaurante"}
                      </p>
                    </div>
                 </div>
@@ -249,7 +250,7 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
                 </div>
                 <div className="flex items-center space-x-2 md:space-x-3">
                   <span className="bg-white/20 px-2 md:px-3 lg:px-4 py-1 md:py-1.5 rounded-full text-sm md:text-base lg:text-lg font-semibold">
-                    ${totalFormatted}
+                    {totalFormatted}
                   </span>
                   <Icon name="ArrowRight" className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 group-hover:translate-x-1 transition-transform duration-200" />
                 </div>
@@ -265,8 +266,8 @@ const HomeScreen = ({ setView, cart, address, setShowContactModal }) => {
                 <span>30-45 min</span>
               </div>
               <div className="flex items-center space-x-1 md:space-x-2">
-                <Icon name="Truck" className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5" />
-                <span>Entrega gratis</span>
+                <Icon name="Utensils" className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5" />
+                <span>Recoge en local</span>
               </div>
             </div>
           </div>

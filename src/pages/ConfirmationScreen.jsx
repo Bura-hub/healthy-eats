@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { formatCOPFromUSD } from '../utils/currency';
+import { formatDeliveryTime } from '../utils/timeHelpers';
 import Icon from '../components/Icon';
 
 // Componente: Confirmación de Pedido - Diseño Profesional Mejorado
-const ConfirmationScreen = ({ setView, orderId, cart, address, setCart }) => {
+const ConfirmationScreen = ({ setView, orderId, cart, address, deliveryTime }) => {
   const [showAnimation, setShowAnimation] = useState(false);
   const [showContent, setShowContent] = useState(false);
   const [showOrderDetails, setShowOrderDetails] = useState(false);
@@ -39,9 +41,7 @@ const ConfirmationScreen = ({ setView, orderId, cart, address, setCart }) => {
     return acc;
   }, { subtotal: 0, items: 0, itemsList: [] });
 
-  const deliveryFee = 5.00;
-  const taxes = orderSummary.subtotal * 0.08; // 8% tax
-  const total = orderSummary.subtotal + deliveryFee + taxes;
+  const total = orderSummary.subtotal; // pickup mode: sin envío ni impuestos
 
   // Generate estimated delivery time
   const estimatedTime = new Date();
@@ -156,26 +156,27 @@ const ConfirmationScreen = ({ setView, orderId, cart, address, setCart }) => {
                   <span className="text-sm md:text-base font-bold text-slate-800">{orderId}</span>
                 </div>
                 
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <span className="text-sm md:text-base text-slate-500 font-medium mr-2">Llegada estimada</span>
-                    <Icon name="Clock" className="w-4 h-4 md:w-5 md:h-5 text-slate-500" />
+                {deliveryTime && (
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center">
+                      <span className="text-sm md:text-base text-slate-500 font-medium mr-2">Hora de recogida</span>
+                      <Icon name="Clock" className="w-4 h-4 md:w-5 md:h-5 text-slate-500" />
+                    </div>
+                    <span className="text-sm md:text-base font-bold text-emerald-600">
+                      {formatDeliveryTime(deliveryTime)}
+                    </span>
                   </div>
-                  <span className="text-sm md:text-base font-bold text-slate-800">
-                    {estimatedTime.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
-                  </span>
-                </div>
+                )}
               </div>
 
-              {/* Dirección de entrega */}
+              {/* Restaurante seleccionado */}
               {address && address.line1 && (
                 <div className="border-t border-slate-200 pt-4">
                   <div className="flex items-start">
                     <Icon name="MapPin" className="w-5 h-5 text-slate-500 mr-3 mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="text-sm text-slate-500 font-medium mb-1">Dirección de entrega</p>
+                      <p className="text-sm text-slate-500 font-medium mb-1">Restaurante</p>
                       <p className="text-sm md:text-base text-slate-800 font-medium">{address.line1}</p>
-                      <p className="text-xs text-slate-400">{address.city}</p>
                     </div>
                   </div>
                 </div>
@@ -186,20 +187,13 @@ const ConfirmationScreen = ({ setView, orderId, cart, address, setCart }) => {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-sm md:text-base text-slate-500 font-medium">Subtotal</span>
-                    <span className="text-sm md:text-base font-medium text-slate-800">${orderSummary.subtotal.toFixed(2)}</span>
+                    <span className="text-sm md:text-base font-medium text-slate-800">{formatCOPFromUSD(orderSummary.subtotal)}</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm md:text-base text-slate-500 font-medium">Entrega</span>
-                    <span className="text-sm md:text-base font-medium text-slate-800">${deliveryFee.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm md:text-base text-slate-500 font-medium">Impuestos</span>
-                    <span className="text-sm md:text-base font-medium text-slate-800">${taxes.toFixed(2)}</span>
-                  </div>
+              {/* Envío e impuestos eliminados en modo recogida */}
                   <div className="border-t border-slate-200 pt-3">
                     <div className="flex justify-between items-center">
                       <span className="text-lg md:text-xl text-slate-800 font-semibold">Total</span>
-                      <span className="text-lg md:text-xl font-bold text-emerald-600">${total.toFixed(2)}</span>
+                      <span className="text-lg md:text-xl font-bold text-emerald-600">{formatCOPFromUSD(total)}</span>
                     </div>
                   </div>
                 </div>
@@ -223,88 +217,45 @@ const ConfirmationScreen = ({ setView, orderId, cart, address, setCart }) => {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm md:text-base font-semibold text-slate-800">${item.total.toFixed(2)}</p>
-                    <p className="text-xs text-slate-500">${item.price.toFixed(2)} c/u</p>
+                    <p className="text-sm md:text-base font-semibold text-slate-800">{formatCOPFromUSD(item.total)}</p>
+                    <p className="text-xs text-slate-500">{formatCOPFromUSD(item.price)} c/u</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Tip Card */}
-          <div className={`bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200/50 rounded-2xl md:rounded-3xl p-4 md:p-6 mb-8 md:mb-10 shadow-sm transition-all duration-700 ${showOrderDetails ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          {/* Nota de recogida */}
+          <div className={`bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200/50 rounded-2xl md:rounded-3xl p-4 md:p-6 mb-8 md:mb-10 shadow-sm transition-all duration-700 ${showOrderDetails ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             <div className="flex items-start">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-2xl flex items-center justify-center mr-4 flex-shrink-0">
-                <Icon name="Bowl" className="w-5 h-5 md:w-6 md:h-6 text-white" />
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mr-4 flex-shrink-0">
+                <Icon name="Clock" className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </div>
               <div>
-                <h3 className="text-sm md:text-base font-semibold text-amber-800 mb-1">Consejo de entrega</h3>
-                <p className="text-sm md:text-base text-amber-700 font-medium leading-relaxed">
-                  Revisa la dirección y timbre para una entrega sin contratiempos
+                <h3 className="text-sm md:text-base font-semibold text-emerald-800 mb-1">Pedido para recoger</h3>
+                <p className="text-sm md:text-base text-emerald-700 font-medium leading-relaxed">
+                  {deliveryTime 
+                    ? `Tu pedido estará listo para recoger ${formatDeliveryTime(deliveryTime)}. Menciona tu ID al llegar.`
+                    : 'Tu pedido estará listo para recoger en 15-20 minutos. Menciona tu ID al llegar.'
+                  }
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Order Timeline Mejorado */}
+          {/* Estado del Pedido (recogida) */}
           <div className={`bg-white/90 backdrop-blur-sm border border-slate-200/50 rounded-2xl md:rounded-3xl p-6 md:p-8 mb-6 md:mb-8 shadow-lg transition-all duration-700 ${showOrderDetails ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg md:text-xl font-semibold text-slate-800">Estado del Pedido</h3>
               <div className="flex items-center text-emerald-600">
                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse mr-2"></div>
                 <span className="text-sm md:text-base font-medium">En preparación</span>
-        </div>
-      </div>
-
-            {/* Timeline mejorado */}
-            <div className="relative">
-              <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-slate-200"></div>
-              
-              {/* Paso 1: Confirmado */}
-              <div className="relative flex items-center mb-6">
-                <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center z-10">
-                  <Icon name="CheckCircle" className="w-5 h-5 text-white" />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm md:text-base font-semibold text-emerald-700">Pedido Confirmado</p>
-                  <p className="text-xs text-slate-500">Tu pedido ha sido recibido y confirmado</p>
-                  <p className="text-xs text-slate-400">{new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</p>
-                </div>
               </div>
-
-              {/* Paso 2: En preparación */}
-              <div className="relative flex items-center mb-6">
-                <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center z-10 animate-pulse">
-                  <Icon name="Clock" className="w-5 h-5 text-white" />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm md:text-base font-semibold text-emerald-700">En Preparación</p>
-                  <p className="text-xs text-slate-500">Tu comida saludable se está preparando</p>
-                  <p className="text-xs text-slate-400">Tiempo estimado: 15-20 min</p>
-                </div>
-              </div>
-
-              {/* Paso 3: En camino */}
-              <div className="relative flex items-center mb-6">
-                <div className="w-8 h-8 bg-slate-300 rounded-full flex items-center justify-center z-10">
-                  <Icon name="Truck" className="w-5 h-5 text-slate-500" />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm md:text-base font-medium text-slate-500">En Camino</p>
-                  <p className="text-xs text-slate-400">El repartidor saldrá hacia tu ubicación</p>
-                </div>
-              </div>
-
-              {/* Paso 4: Entregado */}
-              <div className="relative flex items-center">
-                <div className="w-8 h-8 bg-slate-300 rounded-full flex items-center justify-center z-10">
-                  <Icon name="Check" className="w-5 h-5 text-slate-500" />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm md:text-base font-medium text-slate-500">Entregado</p>
-                  <p className="text-xs text-slate-400">Tu pedido llegará a tu puerta</p>
-                </div>
-              </div>
+            </div>
+            <div className="space-y-3 text-sm text-slate-600">
+              <div className="flex items-center"><Icon name="CheckCircle" className="w-5 h-5 text-emerald-600 mr-2" /> Pedido confirmado</div>
+              <div className="flex items-center"><Icon name="Clock" className="w-5 h-5 text-emerald-600 mr-2" /> Preparando tu pedido</div>
+              <div className="flex items-center"><Icon name="Utensils" className="w-5 h-5 text-emerald-600 mr-2" /> Listo para recoger en 15-20 min</div>
             </div>
           </div>
 
@@ -346,17 +297,9 @@ const ConfirmationScreen = ({ setView, orderId, cart, address, setCart }) => {
 
         {/* Action Buttons */}
         <div className={`space-y-4 md:space-y-6 transition-all duration-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-        <button
-          onClick={() => setView('tracking')}
-            className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-4 md:py-5 lg:py-6 px-5 md:px-6 lg:px-8 rounded-2xl md:rounded-3xl shadow-lg md:shadow-xl hover:shadow-xl md:hover:shadow-2xl transition-all duration-200 active:scale-[0.98] group min-h-[56px] md:min-h-[64px] lg:min-h-[72px]"
-          aria-label="Seguir pedido en tiempo real"
-        >
-            <div className="flex items-center justify-center space-x-2 md:space-x-3">
-              <Icon name="Truck" className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 group-hover:rotate-12 transition-transform duration-200" />
-              <span className="text-base md:text-lg lg:text-xl">Seguir pedido</span>
-              <Icon name="ArrowRight" className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 group-hover:translate-x-1 transition-transform duration-200" />
-            </div>
-        </button>
+        <div className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold py-4 md:py-5 lg:py-6 px-5 md:px-6 lg:px-8 rounded-2xl md:rounded-3xl shadow-lg text-center">
+          Presenta tu ID del pedido en el restaurante seleccionado
+        </div>
           
         <button
             onClick={() => setView('menus')}
@@ -376,7 +319,7 @@ const ConfirmationScreen = ({ setView, orderId, cart, address, setCart }) => {
             <div className="flex items-center justify-center space-x-6 md:space-x-8 text-xs md:text-sm text-slate-500">
               <div className="flex items-center space-x-2">
                 <Icon name="Clock" className="w-3 h-3 md:w-4 md:h-4" />
-                <span>Entrega rápida</span>
+                <span>Listo para recoger</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Icon name="Leaf" className="w-3 h-3 md:w-4 md:h-4" />

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { SAVED_ADDRESSES } from '../data/mockData';
 import Icon from '../components/Icon';
 
-// Componente: Lugar de Entrega con diseño profesional mejorado
-const DeliveryScreen = ({ setView, setAddress, cart, fromCheckout = false }) => {
+// Componente: Selección de Restaurante con diseño profesional mejorado
+const DeliveryScreen = ({ setView, setAddress, cart, fromCheckout = false, showSnackbar }) => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [showMap, setShowMap] = useState(false);
@@ -19,24 +19,47 @@ const DeliveryScreen = ({ setView, setAddress, cart, fromCheckout = false }) => 
 
   const handleSelectAddress = (addr) => {
     setSelectedAddress(addr);
-    setAddress({
-      line1: addr.line1,
-      city: addr.city,
-      postalCode: addr.postalCode
-    });
-    setMessage('✅ Dirección seleccionada');
+      setAddress({
+        line1: addr.name,
+        city: '',
+        postalCode: ''
+      });
+    setMessage('✅ Restaurante seleccionado');
     setTimeout(() => setMessage(''), 2000);
+    
+    // Mostrar snackbar de confirmación
+    if (showSnackbar) {
+      showSnackbar(`Restaurante seleccionado: ${addr.name}`);
+    }
   };
 
   const handleUseAddress = () => {
     if (selectedAddress) {
       setIsLoading(true);
       setAddress({
-        line1: selectedAddress.line1,
-        city: selectedAddress.city,
-        postalCode: selectedAddress.postalCode
+        line1: selectedAddress.name,
+        city: '',
+        postalCode: ''
       });
-      setMessage('✅ Dirección establecida para la entrega');
+      setMessage('✅ Restaurante establecido');
+      
+      // Mostrar snackbar de confirmación
+      if (showSnackbar) {
+        const destination = fromCheckout ? 'Pago' : (cart && cart.length > 0 ? 'Carrito' : 'Menús');
+        showSnackbar(`Restaurante confirmado: ${selectedAddress.name}`, {
+          label: `Ir a ${destination}`,
+          onClick: () => {
+            setIsLoading(false);
+            if (fromCheckout) {
+              setView('checkout');
+            } else {
+              const hasItems = cart && cart.length > 0;
+              setView(hasItems ? 'cart' : 'menus');
+            }
+          }
+        });
+      }
+      
       setTimeout(() => {
         setIsLoading(false);
         // Si viene desde checkout, regresar a checkout
@@ -53,7 +76,7 @@ const DeliveryScreen = ({ setView, setAddress, cart, fromCheckout = false }) => 
 
   const handleMarkAsDefault = () => {
     if (selectedAddress) {
-      setMessage('✅ Dirección marcada como predeterminada');
+      setMessage('✅ Restaurante marcado como predeterminado');
       setTimeout(() => setMessage(''), 2000);
     }
   };
@@ -158,7 +181,7 @@ const DeliveryScreen = ({ setView, setAddress, cart, fromCheckout = false }) => 
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text'
               }}>
-                Lugar de Entrega
+                Restaurante
               </h1>
               <p className="text-slate-500 text-sm sm:text-base font-medium leading-relaxed animate-fade-in-up" style={{
                 fontFamily: 'Inter, sans-serif',
@@ -166,7 +189,7 @@ const DeliveryScreen = ({ setView, setAddress, cart, fromCheckout = false }) => 
                 animationDelay: '0.2s',
                 animationFillMode: 'both'
               }}>
-                Selecciona una dirección guardada o usa el mapa simulado
+                Selecciona un restaurante
               </p>
             </div>
             <button className="p-2 text-slate-400 hover:text-slate-600 transition-all duration-300 hover:scale-110 animate-scale-in" style={{
@@ -212,14 +235,14 @@ const DeliveryScreen = ({ setView, setAddress, cart, fromCheckout = false }) => 
         </div>
       )}
 
-        {/* Direcciones guardadas mejoradas con animaciones */}
+        {/* Restaurantes disponibles */}
         <div className="mb-8 animate-fade-in-up" style={{
           animationDelay: '0.8s',
           animationFillMode: 'both'
         }}>
           <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center space-x-2">
             <Icon name="MapPin" className="w-5 h-5 text-emerald-600 animate-pulse-subtle" />
-            <span>Direcciones guardadas</span>
+            <span>Restaurantes</span>
           </h2>
           <div className="space-y-3">
             {SAVED_ADDRESSES.map((addr, index) => (
@@ -248,7 +271,7 @@ const DeliveryScreen = ({ setView, setAddress, cart, fromCheckout = false }) => 
                   </div>
                   <div className="flex-1">
                     <h3 className="font-bold text-slate-800 text-lg">{addr.name}</h3>
-                    <p className="text-sm text-slate-600 mt-1 leading-relaxed">{addr.line1}</p>
+                    <p className="text-sm text-slate-600 mt-1 leading-relaxed">{addr.deliveryTime}</p>
                     <div className="flex items-center space-x-2 mt-3">
                       {addr.isDefault && (
                         <span className="bg-emerald-100 text-emerald-700 text-xs px-3 py-1 rounded-full font-medium border border-emerald-200">
@@ -261,7 +284,7 @@ const DeliveryScreen = ({ setView, setAddress, cart, fromCheckout = false }) => 
                     </div>
                   </div>
                   <button className="bg-emerald-500 text-white text-xs px-4 py-2 rounded-xl hover:bg-emerald-600 transition-colors duration-300 hover:scale-105 font-medium">
-                    Editar
+                    Elegir
                   </button>
                 </div>
           </div>

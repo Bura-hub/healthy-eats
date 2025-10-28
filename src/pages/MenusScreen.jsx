@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
+import { formatCOPFromUSD } from '../utils/currency';
 import Icon from '../components/Icon';
 import { MENU_DATA } from '../data/mockData';
 
 // Componente: Menús del Día - Diseño Profesional
-const MenusScreen = ({ setView, cart, setCart }) => {
+const MenusScreen = ({ setView, cart, setCart, showSnackbar }) => {
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [selectedDay, setSelectedDay] = useState('L');
   const [searchTerm, setSearchTerm] = useState('');
-  const [showSnackbar, setShowSnackbarLocal] = useState(false);
   const [isFiltering, setIsFiltering] = useState(false);
 
   // Días de la semana
@@ -118,8 +118,12 @@ const MenusScreen = ({ setView, cart, setCart }) => {
     }
     
     // Mostrar snackbar
-    setShowSnackbarLocal(true);
-    setTimeout(() => setShowSnackbarLocal(false), 4000);
+    if (showSnackbar) {
+      showSnackbar('Añadido al carrito', {
+        label: 'Ir al Carrito',
+        onClick: () => setView('cart')
+      });
+    }
   };
 
   const handleQuantityChange = (menuId, change) => {
@@ -139,39 +143,6 @@ const MenusScreen = ({ setView, cart, setCart }) => {
     return item ? item.quantity : 0;
   };
 
-  // Snackbar Component
-  const Snackbar = () => {
-    if (!showSnackbar) return null;
-    
-    return (
-      <div className="fixed bottom-20 left-4 right-4 z-50 animate-slide-up-snackbar">
-        <div className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-5 rounded-3xl shadow-2xl flex items-center justify-between border-2 border-emerald-400/30 backdrop-blur-md">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-              <Icon name="CheckCircle" className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-bold text-lg" style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: '700'
-            }}>
-              ¡Añadido al carrito!
-            </span>
-          </div>
-          <button 
-            onClick={() => setView('cart')}
-            className="bg-white/25 px-4 py-2 rounded-2xl text-sm font-bold hover:bg-white/35 transition-all duration-300 transform hover:scale-105 border border-white/30 backdrop-blur-sm"
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: '700'
-            }}
-            aria-label="Ir al carrito"
-          >
-            Ver Carrito
-          </button>
-        </div>
-      </div>
-    );
-  };
 
   // Vista de Detalle del Plato (Modal)
   const ModalOverlay = () => {
@@ -336,13 +307,13 @@ const MenusScreen = ({ setView, cart, setCart }) => {
                   fontFamily: 'Inter, sans-serif',
                   fontWeight: '600'
                 }}>
-                  Hummus +$1
+                  Hummus +{formatCOPFromUSD(1)}
                 </span>
                 <span className="px-3 py-2 bg-emerald-100 text-emerald-800 text-sm rounded-full font-medium border-2 border-emerald-300" style={{
                   fontFamily: 'Inter, sans-serif',
                   fontWeight: '600'
                 }}>
-                  Queso feta +$1
+                  Queso feta +{formatCOPFromUSD(1)}
                 </span>
               </div>
             </div>
@@ -501,7 +472,7 @@ const MenusScreen = ({ setView, cart, setCart }) => {
                     <span className="text-base font-black text-emerald-500" style={{
                       fontFamily: 'Inter, sans-serif',
                       fontWeight: '900'
-                    }}>${menu.price.toFixed(2)}</span>
+                    }}>{formatCOPFromUSD(menu.price)}</span>
                   </div>
                   
                   {/* Descripción */}
@@ -600,9 +571,6 @@ const MenusScreen = ({ setView, cart, setCart }) => {
           );
         })}
       </div>
-
-      {/* Snackbar */}
-      <Snackbar />
     </div>
   );
 };

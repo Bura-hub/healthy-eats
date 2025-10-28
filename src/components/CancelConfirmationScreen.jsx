@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { formatCOP } from '../utils/currency';
 import Icon from './Icon';
 
 // Componente: Pantalla de Confirmación de Cancelación Profesional
@@ -16,7 +17,7 @@ const CancelConfirmationScreen = ({ orderId, onBackToMenus, onClose }) => {
     
     // Simular cálculo de reembolso
     const timer4 = setTimeout(() => {
-      setRefundAmount(45.50); // Simular monto del pedido
+      setRefundAmount(45.50); // Simular monto del pedido (USD)
     }, 1500);
     
     return () => {
@@ -148,16 +149,16 @@ const CancelConfirmationScreen = ({ orderId, onBackToMenus, onClose }) => {
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-sm md:text-base text-slate-500 font-medium">Monto del pedido</span>
-                  <span className="text-sm md:text-base font-medium text-slate-800">${refundAmount.toFixed(2)}</span>
+                  <span className="text-sm md:text-base font-medium text-slate-800">{formatCOP(refundAmount)}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm md:text-base text-slate-500 font-medium">Cargo de cancelación</span>
-                  <span className="text-sm md:text-base font-medium text-green-600">$0.00</span>
+                  <span className="text-sm md:text-base font-medium text-green-600">{formatCOP(0)}</span>
                 </div>
                 <div className="border-t border-slate-200 pt-3">
                   <div className="flex justify-between items-center">
                     <span className="text-lg md:text-xl text-slate-800 font-semibold">Total a reembolsar</span>
-                    <span className="text-lg md:text-xl font-bold text-red-600">${refundAmount.toFixed(2)}</span>
+                    <span className="text-lg md:text-xl font-bold text-red-600">{formatCOP(refundAmount)}</span>
                   </div>
                 </div>
               </div>

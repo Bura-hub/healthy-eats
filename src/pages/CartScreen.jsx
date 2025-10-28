@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { formatCOPFromUSD } from '../utils/currency';
 import Icon from '../components/Icon';
 
 // Componente: Carrito / Resumen de Pedido
@@ -7,8 +8,8 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
 
   const calculateTotals = useMemo(() => {
     const subtotal = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
-    const deliveryFee = subtotal > 0 ? 5.00 : 0.00; // Tarifa simulada
-    const taxes = subtotal > 0 ? 3.00 : 0.00; // Impuestos simulados
+    const deliveryFee = 0.00; // Sin envío en modo recogida
+    const taxes = subtotal > 0 ? 0.00 : 0.00; // Opcional: impuestos 0 en demo
     
     // Descuentos profesionales
     const discount = subtotal > 30 ? subtotal * 0.1 : 0; // 10% descuento si gastas más de $30
@@ -282,14 +283,14 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
                           fontFamily: 'Inter, sans-serif',
                           fontWeight: '500'
                         }}>
-                          ${item.price.toFixed(2)} c/u
+                          {formatCOPFromUSD(item.price)} c/u
                         </p>
                         {/* Precio Total */}
                         <span className="text-base sm:text-lg font-black text-emerald-500" style={{
                           fontFamily: 'Inter, sans-serif',
                           fontWeight: '900'
                         }}>
-                          ${(item.quantity * item.price).toFixed(2)}
+                          {formatCOPFromUSD(item.quantity * item.price)}
                         </span>
                       </div>
                     </div>
@@ -347,7 +348,7 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
                     fontFamily: 'Inter, sans-serif',
                     fontWeight: '700'
                   }}>
-                    ¡Ahorras ${calculateTotals.savings.toFixed(2)} en este pedido!
+                    ¡Ahorras {formatCOP(calculateTotals.savings)} en este pedido!
                   </span>
         </div>
       </div>
@@ -362,11 +363,11 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
                 }}>
                   Subtotal
                 </span>
-                <span className="text-slate-800 font-black text-sm sm:text-base" style={{
+                  <span className="text-slate-800 font-black text-sm sm:text-base" style={{
                   fontFamily: 'Inter, sans-serif',
                   fontWeight: '900'
-                }}>
-                  ${calculateTotals.subtotal.toFixed(2)}
+                  }}>
+                  {formatCOPFromUSD(calculateTotals.subtotal)}
                 </span>
               </div>
               
@@ -383,40 +384,14 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
                     fontFamily: 'Inter, sans-serif',
                     fontWeight: '900'
                   }}>
-                    -${calculateTotals.discount.toFixed(2)}
+                    -{formatCOPFromUSD(calculateTotals.discount)}
                   </span>
                 </div>
               )}
               
-              <div className="flex justify-between items-center">
-                <span className="text-slate-600 font-medium text-sm sm:text-base" style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontWeight: '500'
-                }}>
-                  Costo de envío
-                </span>
-                <span className="text-slate-800 font-black text-sm sm:text-base" style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontWeight: '900'
-                }}>
-                  ${calculateTotals.deliveryFee.toFixed(2)}
-                </span>
-              </div>
+              {/* Envío eliminado en modo recogida */}
               
-              <div className="flex justify-between items-center">
-                <span className="text-slate-600 font-medium text-sm sm:text-base" style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontWeight: '500'
-                }}>
-                  Impuestos
-                </span>
-                <span className="text-slate-800 font-black text-sm sm:text-base" style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontWeight: '900'
-                }}>
-                  ${calculateTotals.taxes.toFixed(2)}
-                </span>
-              </div>
+              {/* Impuestos ocultos en demo */}
               
               <div className="border-t-2 border-gray-200 pt-2 sm:pt-3">
                 <div className="flex justify-between items-center">
@@ -430,7 +405,7 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
                     fontFamily: 'Inter, sans-serif',
                     fontWeight: '900'
                   }}>
-                    ${calculateTotals.total.toFixed(2)}
+                    {formatCOPFromUSD(calculateTotals.total)}
                   </span>
                 </div>
               </div>
@@ -454,7 +429,7 @@ const CartScreen = ({ setView, cart, setCart, address }) => {
               fontFamily: 'Inter, sans-serif',
               fontWeight: '700'
             }}
-            aria-label={`Programar pedido por ${calculateTotals.total.toFixed(2)}`}
+            aria-label={`Programar pedido por ${formatCOPFromUSD(calculateTotals.total)}`}
           >
             {/* Efecto de brillo */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform translate-x-[-100%] hover:translate-x-[100%] transition-transform duration-700"></div>
