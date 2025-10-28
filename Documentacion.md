@@ -6,100 +6,62 @@ Healthy Eats es una aplicación web progresiva (PWA) para pedidos de menús salu
 ## Metodología de Desarrollo
 
 ### Enfoque de Desarrollo
-El proyecto se desarrolló utilizando una **metodología ágil iterativa**, con las siguientes fases:
 
-#### 1. Fase de Análisis y Diseño
-- **Definición de requisitos**: Identificación de necesidades del usuario (explorar menús, hacer pedidos, seguimiento)
-- **Diseño de experiencia de usuario (UX)**: Flujo de navegación centrado en el usuario
-- **Arquitectura de información**: Estructura de 8 pantallas principales con navegación intuitiva
-- **Diseño visual (UI)**: Sistema de diseño con paleta verde esmeralda, tipografía Inter, componentes reutilizables
+El proyecto se desarrolló utilizando una **metodología ágil iterativa**, dividida en seis fases principales que permitieron construir la aplicación de manera progresiva y ordenada. Este enfoque facilitó la identificación temprana de problemas y la adaptación continua a nuevos requisitos durante el proceso de desarrollo.
 
-#### 2. Fase de Configuración Inicial
-- Configuración de entorno de desarrollo con Vite
-- Instalación de dependencias (React 19, Tailwind CSS, PWA Plugin)
-- Estructura de carpetas modular (pages, components, utils, data)
-- Configuración de ESLint para calidad de código
+#### Fase 1: Análisis y Diseño
 
-#### 3. Fase de Desarrollo por Componentes
-Se utilizó un **enfoque de desarrollo por capas**:
+La primera fase del proyecto consistió en la definición clara de requisitos y el diseño de la experiencia de usuario. Se identificaron las necesidades principales de los usuarios: poder explorar menús saludables, realizar pedidos de forma intuitiva y hacer seguimiento en tiempo real de sus órdenes. Con base en estas necesidades, se diseñó un flujo de navegación centrado en el usuario que prioriza la simplicidad y la eficiencia.
 
-**Capa 1: Componentes Base**
-- Sistema de iconos (Icon.jsx)
-- Componentes UI reutilizables (Button, Input, Card)
-- Barra de navegación (NavBar)
-- Modales (ContactModal, CancelOrderModal)
+La arquitectura de información se estructuró en ocho pantallas principales, cada una con un propósito específico dentro del flujo de compra. El diseño visual adoptó una paleta de colores verde esmeralda que transmite frescura y salud, complementada con la tipografía Inter para garantizar legibilidad en todos los dispositivos. Se definió un sistema de componentes reutilizables que aseguraría consistencia visual en toda la aplicación.
 
-**Capa 2: Utilidades y Servicios**
-- Manejo de moneda (currency.js)
-- Cálculos de tiempo (timeHelpers.js)
-- Datos simulados (mockData.js)
+#### Fase 2: Configuración del Entorno
 
-**Capa 3: Pantallas Principales**
-- HomeScreen (landing page)
-- MenusScreen (catálogo)
-- CartScreen (carrito)
-- DeliveryScreen (selección de restaurante)
-- CheckoutScreen (proceso de pago)
-- ConfirmationScreen (confirmación)
-- OrdersScreen (historial y seguimiento)
-- TrackingScreen (seguimiento en tiempo real)
+Una vez definido el diseño, se procedió a configurar el entorno de desarrollo. Se eligió Vite como herramienta de construcción por su velocidad y simplicidad, junto con React 19 como librería principal para construir la interfaz de usuario. Tailwind CSS se integró para facilitar el desarrollo de estilos mediante clases utilitarias, mientras que el plugin Vite PWA permitiría posteriormente convertir la aplicación en una PWA instalable.
 
-**Capa 4: Gestión de Estado Global**
-- App.jsx como contenedor principal
-- Sistema de navegación por vistas
-- Estado compartido (carrito, pedidos, dirección)
+La estructura de carpetas se organizó de forma modular, separando claramente las páginas (views), componentes reutilizables, utilidades y datos. Esta organización facilita el mantenimiento y la escalabilidad del proyecto. Adicionalmente, se configuró ESLint con reglas específicas para React, garantizando la calidad y consistencia del código desde el inicio.
 
-#### 4. Fase de Integración
-- Conexión de todos los componentes
-- Flujo completo de usuario (explorar → agregar → pagar → confirmar → seguir)
-- Sistema de notificaciones (snackbar)
-- Gestión de tiempos dinámicos
+#### Fase 3: Desarrollo por Capas
 
-#### 5. Fase de Optimización
-- Implementación de PWA (offline, instalable)
-- Optimización de imágenes (WebP)
-- Mejoras de accesibilidad (ARIA labels)
-- Ajustes de UX (animaciones, feedback)
+El desarrollo de la aplicación siguió un enfoque por capas, comenzando desde los componentes más básicos hasta llegar a las funcionalidades más complejas. En la primera capa se construyó un sistema robusto de iconos SVG personalizados, junto con componentes UI fundamentales como botones, inputs y tarjetas. La barra de navegación se diseñó como componente reutilizable con un sistema de badges para mostrar el contador del carrito.
 
-#### 6. Fase de Refinamiento
-- Conversión de precios a COP
-- Cambio de modelo delivery a pickup
-- Implementación de tiempos programados
-- Sistema de seguimiento de pedidos mejorado
+La segunda capa se enfocó en las utilidades y servicios necesarios para la aplicación. Se crearon funciones para el manejo de moneda con conversión automática de USD a COP, calculadoras de tiempo para determinar horarios de recogida, y un archivo de datos simulados que permite probar todas las funcionalidades sin necesidad de un backend real.
+
+En la tercera capa se desarrollaron las ocho pantallas principales de la aplicación. Cada pantalla se construyó como un componente independiente pero conectado al flujo general. HomeScreen sirve como punto de entrada, MenusScreen presenta el catálogo de productos, CartScreen gestiona el carrito de compras, DeliveryScreen permite seleccionar el restaurante, CheckoutScreen procesa el pago, ConfirmationScreen confirma el pedido, OrdersScreen muestra el historial, y TrackingScreen permite hacer seguimiento en tiempo real.
+
+La cuarta capa integró todo mediante App.jsx, que actúa como contenedor principal y gestor del estado global. Aquí se implementó el sistema de navegación por vistas y se centralizó el manejo del estado compartido entre componentes, incluyendo el carrito, los pedidos y la información de entrega.
+
+#### Fase 4: Integración de Funcionalidades
+
+Con todos los componentes individuales desarrollados, se procedió a conectarlos para crear el flujo completo de usuario. Se implementó un sistema de notificaciones mediante snackbars que proporciona feedback inmediato en acciones como agregar productos al carrito o seleccionar un restaurante. La gestión de tiempos dinámicos se integró en el proceso de checkout, calculando automáticamente las opciones de horario disponibles basándose en el momento actual y las restricciones del negocio.
+
+#### Fase 5: Optimización y PWA
+
+La quinta fase se centró en optimizar la aplicación y convertirla en una Progressive Web App. Se implementó la funcionalidad offline mediante service workers, permitiendo que la aplicación funcione incluso sin conexión a internet. Las imágenes se optimizaron al formato WebP para reducir los tiempos de carga, y se agregaron etiquetas ARIA en todos los elementos interactivos para mejorar la accesibilidad. Las animaciones y transiciones se refinaron para proporcionar una experiencia de usuario fluida y moderna.
+
+#### Fase 6: Refinamiento del Modelo de Negocio
+
+La fase final implicó ajustes importantes en el modelo de negocio. Se realizó la conversión completa de precios de dólares a pesos colombianos con una tasa fija de conversión. El modelo de negocio cambió de delivery tradicional a pickup en restaurantes, lo que requirió modificar múltiples componentes y flujos. Se implementó un sistema sofisticado de programación de horarios que calcula el primer slot disponible exactamente 45 minutos después del pedido, con opciones subsecuentes cada 10 minutos hasta las 6 PM. Finalmente, se mejoró el sistema de seguimiento de pedidos con actualización automática de estados cada minuto.
 
 ### Principios de Desarrollo Aplicados
 
-1. **Component-Driven Development**: Construcción modular de UI
-2. **Mobile First**: Diseño responsive desde móvil
-3. **Progressive Enhancement**: Funcionalidad básica → características avanzadas
-4. **DRY (Don't Repeat Yourself)**: Componentes y utilidades reutilizables
-5. **Single Responsibility**: Cada componente con propósito único
-6. **Props Drilling**: Paso de estado por jerarquía de componentes
-7. **Separation of Concerns**: Separación de lógica, presentación y datos
+Durante todo el proceso de desarrollo se aplicaron principios fundamentales de ingeniería de software. El desarrollo guiado por componentes (Component-Driven Development) permitió crear elementos reutilizables y mantener una arquitectura modular. El enfoque Mobile First aseguró que la aplicación funcionara perfectamente en dispositivos móviles antes de adaptarse a pantallas más grandes.
+
+Se siguió el principio de mejora progresiva (Progressive Enhancement), donde primero se implementó la funcionalidad básica y luego se agregaron características avanzadas. El principio DRY (Don't Repeat Yourself) evitó la duplicación de código mediante la creación de componentes y utilidades compartidas. Cada componente se diseñó con una única responsabilidad clara, facilitando su mantenimiento y testing.
+
+El paso de estado entre componentes se manejó mediante Props Drilling, donde el estado global fluye desde el componente principal hacia los componentes hijos. La separación de responsabilidades (Separation of Concerns) se mantuvo estricta, dividiendo claramente la lógica de negocio, la presentación visual y los datos.
 
 ### Herramientas de Desarrollo
 
-- **Editor**: Visual Studio Code
-- **Control de versiones**: Git
-- **Gestor de paquetes**: npm
-- **Servidor de desarrollo**: Vite Dev Server
-- **Linter**: ESLint con reglas React
-- **Estilos**: Tailwind CSS con PostCSS
+El desarrollo se realizó utilizando Visual Studio Code como editor principal, aprovechando sus extensiones para React y Tailwind CSS. El control de versiones se gestionó con Git, permitiendo rastrear cambios y mantener un historial completo del proyecto. npm se utilizó como gestor de paquetes para instalar y mantener todas las dependencias del proyecto.
 
-### Metodología de Testing (Propuesta)
+Vite Dev Server proporcionó un entorno de desarrollo rápido con hot module replacement, permitiendo ver cambios instantáneamente sin recargar la página. ESLint con reglas específicas para React garantizó la calidad del código mediante análisis estático. Tailwind CSS, junto con PostCSS, permitió un desarrollo ágil de estilos mediante clases utilitarias predefinidas.
 
-**Testing Manual Realizado:**
-- Pruebas de navegación entre pantallas
-- Validación de flujo completo de pedido
-- Verificación de cálculos de tiempo
-- Pruebas de responsividad en múltiples dispositivos
-- Verificación de funcionalidad offline
+### Metodología de Testing
 
-**Testing Automatizado Sugerido:**
-- Unit testing: Jest + React Testing Library
-- Integration testing: Pruebas de flujos completos
-- E2E testing: Cypress o Playwright
-- Accessibility testing: axe-core
+El testing de la aplicación se realizó en dos niveles. A nivel manual, se ejecutaron pruebas exhaustivas de navegación entre todas las pantallas, validando el flujo completo desde la exploración de menús hasta la confirmación del pedido. Se verificaron los cálculos de tiempo en diferentes escenarios, se probó la responsividad en dispositivos móviles, tablets y desktop, y se validó la funcionalidad offline desconectando la red.
+
+Para futuras iteraciones, se propone implementar testing automatizado utilizando Jest junto con React Testing Library para pruebas unitarias de componentes individuales. Las pruebas de integración verificarían flujos completos de usuario, mientras que herramientas como Cypress o Playwright permitirían ejecutar tests end-to-end simulando interacciones reales. Finalmente, axe-core podría utilizarse para garantizar el cumplimiento de estándares de accesibilidad.
 
 ## Tecnologías Utilizadas
 
